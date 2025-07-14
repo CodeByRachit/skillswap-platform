@@ -1,0 +1,3088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Swap Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Three.js CDN for 3D animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        /* General Body Styling for the entire app */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            /* Default background for the entire app, can be overridden by specific pages */
+            background-color: #1a202c; /* Dark background for the entire app */
+            color: #e2e8f0; /* Light text color default for dark theme */
+        }
+
+        /* Custom styles for dynamic Tailwind classes */
+        .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
+        .from-purple-600 { --tw-gradient-from: #9333ea; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(147, 51, 234, 0)); }
+        .to-blue-500 { --tw-gradient-to: #3b82f6; }
+
+        .text-purple-800 { color: #581c87; }
+        .bg-purple-700 { background-color: #6b21a8; }
+        .hover\:bg-purple-800:hover { background-color: #581c87; }
+        .border-purple-500 { border-color: #a855f7; }
+        .text-purple-600 { color: #9333ea; }
+        .bg-purple-100 { background-color: #f3e8ff; }
+
+        .text-indigo-800 { color: #3730a3; }
+        .bg-indigo-700 { background-color: #4338ca; }
+        .hover\:bg-indigo-800:hover { background-color: #3730a3; }
+        .border-indigo-500 { border-color: #6366f1; }
+        .text-indigo-600 { color: #4f46e5; }
+        .bg-indigo-100 { background-color: #e0e7ff; }
+
+        .bg-green-700 { background-color: #15803d; }
+        .text-green-800 { color: #166534; }
+        .bg-green-600 { background-color: #22c55e; }
+        .hover\:bg-green-700:hover { background-color: #15803d; }
+        .border-green-500 { border-color: #22c55e; }
+        .text-green-600 { color: #16a34a; }
+        .bg-green-100 { background-color: #dcfce7; }
+        .border-green-300 { border-color: #86efac; }
+        .text-green-500 { color: #22c55e; }
+
+        .bg-blue-100 { background-color: #dbeafe; }
+        .border-blue-500 { border-color: #3b82f6; }
+        .text-blue-700 { color: #1d4ed8; }
+
+        .bg-pink-100 { background-color: #fce7f3; }
+        .border-pink-500 { border-color: #ec4899; }
+        .text-pink-700 { color: #be185d; }
+
+        .bg-teal-100 { background-color: #ccfbf1; }
+        .border-teal-500 { border-color: #14b8a6; }
+        .text-teal-700 { color: #0f766e; }
+
+        .bg-yellow-100 { background-color: #fef9c3; }
+        .border-yellow-300 { border-color: #fcd34d; }
+        .text-yellow-600 { color: #eab308; }
+        .text-yellow-800 { color: #a16207; }
+
+        .bg-red-100 { background-color: #fee2e2; }
+        .border-red-300 { border-color: #fca5a5; }
+        .text-red-600 { color: #dc2626; }
+        .text-red-800 { color: #991b1b; }
+
+        /* General styles for card, shadow, padding, margin, etc. */
+        .rounded-xl { border-radius: 0.75rem; }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .p-8 { padding: 2rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .max-w-md { max-width: 28rem; }
+        .my-12 { margin-top: 3rem; margin-bottom: 3rem; }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem; }
+        .block { display: block; }
+        /* Removed w-full from here to allow max-width and margin:auto to center inputs */
+        .rounded-md { border-radius: 0.375rem; }
+        .border-gray-300 { border-color: #d1d5db; }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .focus\:ring-2:focus { --tw-ring-offset-width: 2px; --tw-ring-offset-color: #fff; --tw-ring-color: #4f46e5; }
+        .focus\:ring-offset-2:focus { --tw-ring-offset-width: 2px; }
+        .p-3 { padding: 0.75rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .text-white { color: #fff; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .font-medium { font-weight: 500; }
+        .mt-6 { margin-top: 1.5rem; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-900 { color: #111827; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .bg-gray-100 { background-color: #f3f4f6; }
+        .bg-white { background-color: #fff; }
+        .border { border-width: 1px; }
+        .border-transparent { border-color: transparent; }
+        .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
+        .rounded-full { border-radius: 9999px; }
+        .object-cover { object-fit: cover; }
+        .w-10 { width: 2.5rem; }
+        .h-10 { height: 2.5rem; }
+        .w-12 { width: 3rem; }
+        .h-12 { height: 3rem; }
+        .w-24 { width: 6rem; }
+        .h-24 { height: 6rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .list-disc { list-style-type: disc; }
+        .list-inside { list-style-position: inside; }
+        .mt-auto { margin-top: auto; }
+        .grid { display: grid; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-4 { gap: 1rem; }
+        .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .bg-opacity-50 { background-color: rgba(0, 0, 0, 0.5); }
+        .z-50 { z-index: 50; }
+        .max-h-\[70vh\] { max-height: 70vh; }
+        .overflow-y-auto { overflow-y: auto; }
+        .absolute { position: absolute; }
+        .top-4 { top: 1rem; }
+        .right-4 { right: 1rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .font-bold { font-weight: 700; }
+        .flex-grow { flex-grow: 1; }
+        .justify-end { justify-content: flex-end; }
+        .items-end { align-items: flex-end; }
+        .items-start { align-items: flex-start; }
+        .items-stretch { align-items: stretch; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .space-x-2 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.5rem; }
+        .space-x-4 > :not([hidden]) ~ :not([hidden]) { margin-left: 1rem; }
+        .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+        .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem; }
+        .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem; }
+        .h-screen { height: 100vh; }
+        .min-h-screen { min-height: 100vh; }
+        .relative { position: relative; }
+        .cursor-pointer { cursor: pointer; }
+        .transition-colors { transition-property: background-color, border-color, color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+        .duration-300 { transition-duration: 300ms; }
+        .ease-in-out { transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+        .opacity-75 { opacity: 0.75; }
+        .opacity-100 { opacity: 1; }
+        .z-10 { z-index: 10; }
+        .z-20 { z-index: 20; }
+        .z-30 { z-index: 30; }
+        .z-40 { z-index: 40; }
+        .z-50 { z-index: 50; }
+        .top-0 { top: 0; }
+        .left-0 { left: 0; }
+        .right-0 { right: 0; }
+        .bottom-0 { bottom: 0; }
+        .flex-shrink-0 { flex-shrink: 0; }
+        .flex-grow { flex-grow: 1; }
+        .flex-wrap { flex-wrap: wrap; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-x-4 { column-gap: 1rem; }
+        .gap-y-2 { row-gap: 0.5rem; }
+        .max-w-7xl { max-width: 80rem; }
+        .max-w-6xl { max-width: 72rem; }
+        .max-w-5xl { max-width: 64rem; }
+        .max-w-4xl { max-width: 56rem; }
+        .max-w-3xl { max-width: 48rem; }
+        .max-w-2xl { max-width: 42rem; }
+        .max-w-xl { max-width: 36rem; }
+        .max-w-lg { max-width: 32rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-sm { max-width: 24rem; }
+        .max-w-xs { max-width: 20rem; }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+        .text-5xl { font-size: 3rem; line-height: 1; }
+        .text-6xl { font-size: 3.75rem; line-height: 1; }
+        .leading-tight { line-height: 1.25; }
+        .leading-snug { line-height: 1.375; }
+        .leading-normal { line-height: 1.5; }
+        .leading-relaxed { line-height: 1.625; }
+        .leading-loose { line-height: 2; }
+        .tracking-wide { letter-spacing: 0.025em; }
+        .tracking-wider { letter-spacing: 0.05em; }
+        .tracking-widest { letter-spacing: 0.1em; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .text-justify { text-align: justify; }
+        .text-primary-800 { color: var(--color-primary-800); }
+        .bg-primary-600 { background-color: var(--color-primary-600); }
+        .hover\:bg-primary-700:hover { background-color: var(--color-primary-700); }
+        .border-primary-500 { border-color: var(--color-primary-500); }
+        .text-primary-600 { color: var(--color-primary-600); }
+        .bg-primary-200 { background-color: var(--color-primary-200); }
+        .border-primary-400 { border-color: var(--color-primary-400); }
+        .bg-secondary-100 { background-color: var(--color-secondary-100); }
+        .border-secondary-500 { border-color: var(--color-secondary-500); }
+        .text-secondary-700 { color: var(--color-secondary-700); }
+        .bg-accent-100 { background-color: var(--color-accent-100); }
+        .border-accent-500 { border-color: var(--color-accent-500); }
+        .text-accent-700 { color: var(--color-accent-700); }
+        .text-theme-text { color: var(--color-text); }
+        .bg-theme-bg { background-color: var(--color-bg); }
+        .bg-theme-header-bg { background-color: var(--color-header-bg); }
+        .text-theme-header-text { color: var(--color-header-text); }
+        .bg-theme-button-bg { background-color: var(--color-button-bg); }
+        .hover\:bg-theme-button-hover:hover { background-color: var(--color-button-hover); }
+
+        /* Custom variables for dynamic themes */
+        :root {
+            --color-primary-800: #581c87; /* Default to purple-800 */
+            --color-primary-600: #7c3aed; /* Default to purple-600 */
+            --color-primary-700: #6b21a8; /* Default to purple-700 */
+            --color-primary-500: #a855f7; /* Default to purple-500 */
+            --color-primary-200: #e9d5ff; /* Default to purple-200 */
+            --color-primary-400: #c084fc; /* Default to purple-400 */
+            --color-secondary-100: #fce7f3; /* Default to pink-100 */
+            --color-secondary-500: #ec4899; /* Default to pink-500 */
+            --color-secondary-700: #be185d; /* Default to pink-700 */
+            --color-accent-100: #f0abfc; /* Default to fuchsia-100 */
+            --color-accent-500: #d946ef; /* Default to fuchsia-500 */
+            --color-accent-700: #a21caf; /* Default to fuchsia-700 */
+            --color-text: #ffffff; /* Changed to white for better contrast on dark backgrounds */
+            --color-bg: #1a202c; /* Dark background */
+            --color-header-bg: #2d3748; /* Darker header */
+            --color-header-text: #ffffff; /* White text for header */
+            --color-button-bg: #7c3aed; /* Default to purple-600 */
+            --color-button-hover: #6b21a8; /* Default to purple-700 */
+        }
+
+        .theme-indigo {
+            --color-primary-800: #3730a3;
+            --color-primary-600: #4f46e5;
+            --color-primary-700: #4338ca;
+            --color-primary-500: #6366f1;
+            --color-primary-200: #e0e7ff;
+            --color-primary-400: #818cf8;
+            --color-secondary-100: #dbeafe;
+            --color-secondary-500: #3b82f6;
+            --color-secondary-700: #1d4ed8;
+            --color-accent-100: #e9d5ff; /* using purple-100 as accent */
+            --color-accent-500: #a855f7; /* using purple-500 as accent */
+            --color-accent-700: #7e22ce; /* using purple-700 as accent */
+            --color-text: #ffffff; /* Light text for dark theme */
+            --color-bg: #1a202c; /* Dark background */
+            --color-header-bg: #2d3748; /* Darker header */
+            --color-header-text: #ffffff;
+            --color-button-bg: #4f46e5;
+            --color-button-hover: #4338ca;
+        }
+
+        .theme-purple {
+            --color-primary-800: #581c87;
+            --color-primary-600: #7c3aed;
+            --color-primary-700: #6b21a8;
+            --color-primary-500: #a855f7;
+            --color-primary-200: #e9d5ff;
+            --color-primary-400: #c084fc;
+            --color-secondary-100: #fce7f3;
+            --color-secondary-500: #ec4899;
+            --color-secondary-700: #be185d;
+            --color-accent-100: #f0abfc; /* fuchsia-100 */
+            --color-accent-500: #d946ef; /* fuchsia-500 */
+            --color-accent-700: #a21caf; /* fuchsia-700 */
+            --color-text: #ffffff; /* Light text for dark theme */
+            --color-bg: #1a202c; /* Dark background */
+            --color-header-bg: #2d3748; /* Darker header */
+            --color-header-text: #ffffff;
+            --color-button-bg: #7c3aed;
+            --color-button-hover: #6b21a8;
+        }
+
+        .theme-green {
+            --color-primary-800: #166534;
+            --color-primary-600: #22c55e;
+            --color-primary-700: #15803d;
+            --color-primary-500: #22c55e;
+            --color-primary-200: #dcfce7;
+            --color-primary-400: #4ade80;
+            --color-secondary-100: #ccfbf1;
+            --color-secondary-500: #14b8a6;
+            --color-secondary-700: #0f766e;
+            --color-accent-100: #dbeafe; /* using blue-100 as accent */
+            --color-accent-500: #3b82f6; /* using blue-500 as accent */
+            --color-accent-700: #1d4ed8; /* using blue-700 as accent */
+            --color-text: #ffffff; /* Light text for dark theme */
+            --color-bg: #1a202c; /* Dark background */
+            --color-header-bg: #2d3748; /* Darker header */
+            --color-header-text: #ffffff;
+            --color-button-bg: #22c55e;
+            --color-button-hover: #15803d;
+        }
+
+        /* Apply dynamic colors using CSS variables */
+        .text-primary-800 { color: var(--color-primary-800); }
+        .bg-primary-600 { background-color: var(--color-primary-600); }
+        .hover\:bg-primary-700:hover { background-color: var(--color-primary-700); }
+        .border-primary-500 { border-color: var(--color-primary-500); }
+        .text-primary-600 { color: var(--color-primary-600); }
+        .bg-primary-200 { background-color: var(--color-primary-200); }
+        .border-primary-400 { border-color: var(--color-primary-400); }
+        .bg-secondary-100 { background-color: var(--color-secondary-100); }
+        .border-secondary-500 { border-color: var(--color-secondary-500); }
+        .text-secondary-700 { color: var(--color-secondary-700); }
+        .bg-accent-100 { background-color: var(--color-accent-100); }
+        .border-accent-500 { border-color: var(--color-accent-500); }
+        .text-accent-700 { color: var(--color-accent-700); }
+        .text-theme-text { color: var(--color-text); }
+        .bg-theme-bg { background-color: var(--color-bg); }
+        .bg-theme-header-bg { background-color: var(--color-header-bg); }
+        .text-theme-header-text { color: var(--color-header-text); }
+        .bg-theme-button-bg { background-color: var(--color-button-bg); }
+        .hover\:bg-theme-button-hover:hover { background-color: var(--color-button-hover); }
+
+        /* General button styles for the new design */
+        .btn-primary {
+            @apply px-6 py-3 rounded-full font-semibold text-white transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg;
+        }
+        .btn-secondary {
+            @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg;
+        }
+        .input-field {
+            /* Existing styles */
+            @apply p-3 border shadow-sm; /* Removed w-full from here */
+            /* New styles for full curve and visual centering */
+            border-radius: 9999px; /* Force full curve (pill shape) */
+            max-width: 300px; /* Limit width to make it visually centered */
+            margin-left: auto; /* Center horizontally */
+            margin-right: auto; /* Center horizontally */
+            /* New styles for animation and better look */
+            @apply transition-all duration-200 ease-in-out;
+            /* Focus state */
+            @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+            /* Add a subtle shadow on focus */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Default shadow */
+        }
+
+        .input-field:focus {
+            box-shadow: 0 0 0 3px rgba(var(--color-primary-500-rgb), 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Custom focus shadow */
+        }
+        /* Define RGB values for primary colors for use in rgba() */
+        .theme-indigo { --color-primary-500-rgb: 99, 102, 241; } /* #6366f1 */
+        .theme-purple { --color-primary-500-rgb: 168, 85, 247; } /* #a855f7 */
+        .theme-green { --color-primary-500-rgb: 34, 197, 94; } /* #22c55e */
+
+
+        /* Specific styles for the new design elements */
+        /* AuthPage background - reverted to a solid dark color */
+        .auth-page-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background-color: #1a202c; /* A solid dark background */
+        }
+
+        /* Canvas for the animated background */
+        #three-background-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Behind the auth card */
+        }
+
+        /* Improved Auth Card - adjusted for solid background */
+        .auth-card {
+            background-color: #2d3748; /* Solid dark background for the card */
+            border: 1px solid #4a5568; /* Slightly lighter border */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Prominent shadow */
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            z-index: 10; /* Above the canvas */
+            animation: card-glow 3s infinite alternate ease-in-out; /* Apply glow animation */
+        }
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Keyframes for the glowing effect on the auth card */
+        @keyframes card-glow {
+            0% {
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 0px rgba(var(--color-primary-500-rgb), 0);
+            }
+            50% {
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(var(--color-primary-500-rgb), 0.6);
+            }
+            100% {
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 0px rgba(var(--color-primary-500-rgb), 0);
+            }
+        }
+
+        /* Adjustments for text within auth card for better contrast */
+        .auth-card h2, .auth-card label, .auth-card summary {
+            color: #ffffff; /* White text for better contrast on dark background */
+            text-shadow: none; /* Removed text shadow */
+        }
+        .auth-card .text-gray-700 { /* Override for specific gray text */
+            color: #e0e0e0;
+        }
+        .auth-card .text-gray-600 {
+            color: #cccccc;
+        }
+        /* Explicitly set text color for input fields within auth card */
+        .auth-card .input-field {
+            color: #1a202c; /* Dark text for light input backgrounds */
+            background-color: #ffffff; /* White background for inputs */
+            border-color: #d1d5db; /* Light gray border */
+        }
+        .auth-card .input-field::placeholder {
+            color: #888;
+        }
+
+        /* Improved Tab Buttons for Auth Page */
+        .auth-card .tab-button {
+            background-color: #4a5568; /* Darker background for inactive tabs */
+            color: #e2e8f0; /* Lighter text for inactive */
+            font-weight: 600;
+            transition: all 0.3s ease-in-out;
+            flex-grow: 1; /* Make tabs take equal width */
+            padding: 0.75rem 1.5rem; /* Adjust padding */
+            border-radius: 9999px; /* Pill shape */
+        }
+        .auth-card .tab-button.active {
+            background-color: #ffffff; /* Solid white for active tab */
+            color: var(--color-primary-600); /* Primary color text for active */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        .auth-card .tab-button.inactive:hover {
+            background-color: #616e80; /* Slightly lighter dark on hover */
+            color: #ffffff;
+        }
+
+        /* Auth page specific buttons */
+        .auth-card .btn-primary {
+            background-color: var(--color-primary-600);
+            box-shadow: 0 4px 10px rgba(var(--color-primary-600-rgb), 0.3);
+        }
+        .auth-card .btn-primary:hover {
+            background-color: var(--color-primary-700);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+        /* Define RGB values for primary colors for use in rgba() */
+        .theme-indigo { --color-primary-600-rgb: 79, 70, 229; --color-primary-700-rgb: 67, 56, 202; } /* #4f46e5, #4338ca */
+        .theme-purple { --color-primary-600-rgb: 124, 58, 237; --color-primary-700-rgb: 107, 33, 168; } /* #7c3aed, #6b21a8 */
+        .theme-green { --color-primary-600-rgb: 34, 197, 94; --color-primary-700-rgb: 21, 128, 61; } /* #22c55e, #15803d */
+
+        /* Auth card logo */
+        .auth-card .logo-circle {
+            background-color: #ffffff; /* White background for logo */
+            color: var(--color-primary-600); /* Primary color text */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Scroll Animation Styles */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Card Hover Effect */
+        .card-hover-effect {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Skill Tag Styling */
+        .skill-tag {
+            @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-gray-700 text-gray-200 mr-2 mb-2 transition-colors duration-200;
+        }
+        .skill-tag:hover {
+            @apply bg-gray-600;
+        }
+        .availability-tag {
+            @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-gray-700 text-gray-300 mr-2 mb-2 transition-colors duration-200;
+        }
+        .availability-tag:hover {
+            @apply bg-gray-600;
+        }
+
+        /* Header Navigation Link Styling */
+        .nav-link {
+            @apply px-3 py-2 rounded-xl text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200;
+            position: relative; /* Needed for the underline */
+        }
+        .nav-link.active {
+            @apply bg-primary-700 text-primary-200;
+        }
+        /* Underline for active navigation link */
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 16px); /* Adjust width to be slightly less than button width */
+            height: 2px;
+            background-color: var(--color-primary-200); /* Use a theme color for the underline */
+            border-radius: 1px;
+        }
+
+
+        /* Platform Announcement Banner */
+        .platform-announcement {
+            @apply relative z-10 bg-secondary-900 border-l-4 border-secondary-500 text-secondary-200 p-4 mt-4 mx-auto max-w-4xl rounded-md shadow-sm;
+            color: #e0e7ff; /* Light blue for better visibility on dark secondary background */
+            background-color: #1f2937; /* Darker gray for the banner background */
+            border-color: #6366f1; /* Indigo-500 for the border */
+        }
+        .platform-announcement .font-bold {
+            color: #93c5fd; /* Lighter blue for the bold text */
+        }
+
+        /* Modal specific styling to match the dark theme */
+        .modal-content-dark {
+            background-color: #2d3748; /* Dark background for modal content */
+            border: 1px solid #4a5568; /* Slightly lighter border */
+            color: #e2e8f0; /* Light text color */
+        }
+        .modal-content-dark .text-gray-800 { /* For modal titles */
+            color: #ffffff; /* White text for titles */
+        }
+        .modal-content-dark .text-gray-700 { /* For modal body text */
+            color: #e0e0e0; /* Lighter gray for body text */
+        }
+        /* Input fields within modals */
+        .modal-content-dark .input-field {
+            background-color: #4a5568; /* Darker gray for modal inputs */
+            color: #e2e8f0; /* Light text color for modal inputs */
+            border-color: #616e80; /* Slightly lighter border for modal inputs */
+        }
+        .modal-content-dark .input-field::placeholder {
+            color: #a0aec0; /* Lighter placeholder text */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- React and ReactDOM CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <script type="text/babel">
+        // Define the base URL for API calls
+        const BASE_URL = 'http://127.0.0.1:5000';
+
+        // Define themes in JavaScript to be accessible by the frontend logic
+        const themes = {
+            indigo: {
+                primary: 'indigo',
+                secondary: 'blue',
+                accent: 'purple',
+                text: 'gray-900',
+                bg: 'gray-100',
+                headerBg: 'indigo-700',
+                headerText: 'white',
+                buttonBg: 'indigo-600',
+                buttonHover: 'indigo-700',
+            },
+            purple: {
+                primary: 'purple',
+                secondary: 'pink',
+                accent: 'fuchsia',
+                text: 'gray-900',
+                bg: 'gray-50',
+                headerBg: 'purple-700',
+                headerText: 'white',
+                buttonBg: 'purple-600',
+                buttonHover: 'purple-700',
+            },
+            green: {
+                primary: 'green',
+                secondary: 'teal',
+                accent: 'lime',
+                text: 'gray-900',
+                bg: 'gray-100',
+                headerBg: 'green-700',
+                headerText: 'white',
+                buttonBg: 'green-600',
+                buttonHover: 'green-700',
+            },
+        };
+
+        const { useState, useEffect, createContext, useContext, useCallback, useRef } = React;
+        const ReactDOM = window.ReactDOM;
+        const THREE = window.THREE; // Access Three.js from the global scope
+
+        const AuthContext = createContext(null);
+        const ThemeContext = createContext(null);
+
+        const AuthProvider = ({ children }) => {
+            const [currentUser, setCurrentUser] = useState(null);
+            const [userId, setUserId] = useState(localStorage.getItem('skillSwapUserId') || null);
+            const [userProfile, setUserProfile] = useState(null);
+            const [isAuthReady, setIsAuthReady] = useState(false); // To track if initial auth check is done
+
+            // Function to fetch user profile
+            const fetchUserProfile = useCallback(async (id) => {
+                if (!id) return null;
+                try {
+                    const response = await fetch(`${BASE_URL}/api/profile/${id}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data;
+                    } else {
+                        const errorData = await response.json();
+                        console.error("Failed to fetch user profile:", errorData.error || response.statusText);
+                        return null;
+                    }
+                } catch (error) {
+                    console.error("Network error fetching user profile:", error.message);
+                    return null;
+                }
+            }, []);
+
+            // Initial auth check on component mount
+            useEffect(() => {
+                const checkAuth = async () => {
+                    const storedUserId = localStorage.getItem('skillSwapUserId');
+                    if (storedUserId) {
+                        const profile = await fetchUserProfile(storedUserId);
+                        if (profile) {
+                            setCurrentUser({ uid: storedUserId });
+                            setUserId(storedUserId);
+                            setUserProfile(profile);
+                        } else {
+                            // If profile fetch fails, clear stored ID
+                            localStorage.removeItem('skillSwapUserId');
+                            setUserId(null);
+                            setCurrentUser(null);
+                            setUserProfile(null);
+                        }
+                    }
+                    setIsAuthReady(true); // Mark auth check as complete
+                };
+                checkAuth();
+            }, [fetchUserProfile]);
+
+            // Function to handle user login
+            const login = useCallback(async (name, password) => {
+                try {
+                    const response = await fetch(`${BASE_URL}/api/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, password })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        localStorage.setItem('skillSwapUserId', data.userId);
+                        setCurrentUser({ uid: data.userId });
+                        setUserId(data.userId);
+                        setUserProfile(data.userProfile);
+                        return { success: true, message: data.message };
+                    } else {
+                        return { success: false, error: data.error || response.statusText };
+                    }
+                } catch (error) {
+                    console.error("Network or API error during login:", error.message);
+                    return { success: false, error: `Network error: ${error.message}. Please ensure the backend server is running.` };
+                }
+            }, []);
+
+            // Function to handle user signup
+            const signup = useCallback(async (name, password, location, skillsOffered, skillsWanted, availability, isPublic) => {
+                try {
+                    const response = await fetch(`${BASE_URL}/api/auth/signup`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, password, location, skillsOffered, skillsWanted, availability, isPublic })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        localStorage.setItem('skillSwapUserId', data.userId);
+                        setCurrentUser({ uid: data.userId });
+                        setUserId(data.userId);
+                        setUserProfile(data.userProfile);
+                        return { success: true, message: data.message };
+                    } else {
+                        return { success: false, error: data.error || response.statusText };
+                    }
+                } catch (error) {
+                    console.error("Network or API error during signup:", error.message);
+                    return { success: false, error: `Network error: ${error.message}. Please ensure the backend server is running.` };
+                }
+            }, []);
+
+            // Function to handle user logout
+            const logout = useCallback(() => {
+                localStorage.removeItem('skillSwapUserId');
+                setCurrentUser(null);
+                setUserId(null);
+                setUserProfile(null);
+                // No need to call backend for logout in this stateless token-based approach
+            }, []);
+
+            // Re-fetch user profile if userId changes (e.g., after login/signup)
+            useEffect(() => {
+                if (userId && isAuthReady) {
+                    fetchUserProfile(userId).then(profile => {
+                        if (profile) {
+                            setUserProfile(profile);
+                        }
+                    });
+                }
+            }, [userId, isAuthReady, fetchUserProfile]);
+
+            const authValue = { currentUser, userId, userProfile, isAuthReady, login, signup, logout };
+            const currentThemeName = userProfile?.theme || 'purple'; // Default theme to purple as per new design
+            const currentTheme = themes[currentThemeName] || themes.purple;
+
+            return (
+                <AuthContext.Provider value={authValue}>
+                    <ThemeContext.Provider value={currentTheme}>
+                        {children}
+                    </ThemeContext.Provider>
+                </AuthContext.Provider>
+            );
+        };
+
+        const useAuth = () => useContext(AuthContext);
+        const useTheme = () => useContext(ThemeContext);
+
+        // Component for scroll animations
+        const AnimatedSection = ({ children, className = '' }) => {
+            const domRef = useRef();
+            const [isVisible, setVisible] = useState(false);
+
+            useEffect(() => {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setVisible(true);
+                            observer.unobserve(domRef.current); // Stop observing once visible
+                        }
+                    });
+                }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+
+                const currentRef = domRef.current;
+                if (currentRef) {
+                    observer.observe(currentRef);
+                }
+
+                return () => {
+                    if (currentRef) {
+                        observer.unobserve(currentRef);
+                    }
+                };
+            }, []);
+
+            return (
+                <div
+                    ref={domRef}
+                    className={`${className} fade-in-up ${isVisible ? 'is-visible' : ''}`}
+                >
+                    {children}
+                </div>
+            );
+        };
+
+
+        const LoadingSpinner = () => {
+            const theme = useTheme();
+            return (
+                <div className={`flex justify-center items-center h-screen bg-theme-bg`}>
+                    <div className={`animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary-500`}></div>
+                    <p className={`ml-4 text-lg text-theme-text`}>Loading...</p>
+                </div>
+            );
+        };
+
+        const Modal = ({ isOpen, onClose, title, children }) => {
+            if (!isOpen) return null;
+            const theme = useTheme();
+            return (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 p-4">
+                    <div className={`rounded-lg shadow-xl max-w-lg w-full p-6 relative modal-content-dark`}> {/* Added modal-content-dark */}
+                        <h3 className={`text-xl font-semibold text-gray-800 mb-4`}>{title}</h3>
+                        <button
+                            onClick={onClose}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-200 text-2xl font-bold"
+                        >
+                            &times;
+                        </button>
+                        <div className="max-h-[70vh] overflow-y-auto">
+                            {children}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const MessageModal = ({ isOpen, onClose, message }) => {
+            const theme = useTheme();
+            return (
+                <Modal isOpen={isOpen} onClose={onClose} title="Notification">
+                    <p className={`text-gray-700`}>{message}</p>
+                    <div className="mt-6 flex justify-end">
+                        <button
+                            onClick={onClose}
+                            className={`btn-primary bg-theme-button-bg hover:bg-theme-button-hover`}
+                        >
+                            OK
+                        </button>
+                    </div>
+                </Modal>
+            );
+        };
+
+        const AuthPage = ({ onLoginSuccess }) => {
+            const { login, signup } = useAuth();
+            const theme = useTheme();
+            const [activeTab, setActiveTab] = useState('signIn'); // 'signIn' or 'signUp'
+            const [name, setName] = useState('');
+            const [password, setPassword] = useState('');
+            const [confirmPassword, setConfirmPassword] = useState('');
+            const [location, setLocation] = useState('');
+            const [skillsOffered, setSkillsOffered] = useState('');
+            const [skillsWanted, setSkillsWanted] = useState('');
+            const [availability, setAvailability] = useState('');
+            const [isPublic, setIsPublic] = useState(true);
+            const [message, setMessage] = useState('');
+            const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+
+            // State for password visibility
+            const [showSignInPassword, setShowSignInPassword] = useState(false);
+            const [showSignUpPassword, setShowSignUpPassword] = useState(false);
+            const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+            const canvasRef = useRef(null);
+            let scene, camera, renderer, particles, particleCount, mouseX = 0, mouseY = 0;
+
+            useEffect(() => {
+                if (!canvasRef.current) return;
+
+                // Initialize Three.js scene
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true }); // alpha: true for transparent background
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio); // For sharper rendering on high-DPI screens
+
+                // Create particles
+                particleCount = 500;
+                const geometry = new THREE.BufferGeometry();
+                const positions = [];
+                const colors = [];
+                const color = new THREE.Color();
+
+                for (let i = 0; i < particleCount; i++) {
+                    // Position particles randomly in a cube
+                    positions.push(Math.random() * 2000 - 1000); // x
+                    positions.push(Math.random() * 2000 - 1000); // y
+                    positions.push(Math.random() * 2000 - 1000); // z
+
+                    // Assign colors (subtle blues/purples)
+                    color.setHSL(Math.random() * 0.1 + 0.6, 0.7, 0.5); // Hue between blue and purple
+                    colors.push(color.r, color.g, color.b);
+                }
+
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+                const material = new THREE.PointsMaterial({
+                    size: 5,
+                    vertexColors: true, // Use colors from geometry
+                    transparent: true,
+                    opacity: 0.7,
+                    sizeAttenuation: true // Particles closer to camera appear larger
+                });
+
+                particles = new THREE.Points(geometry, material);
+                scene.add(particles);
+
+                camera.position.z = 500;
+
+                // Animation loop
+                const animate = () => {
+                    requestAnimationFrame(animate);
+
+                    // Rotate particles
+                    particles.rotation.x += 0.0005;
+                    particles.rotation.y += 0.001;
+
+                    // Subtle camera movement based on mouse
+                    camera.position.x += (mouseX - camera.position.x) * 0.005;
+                    camera.position.y += (-mouseY - camera.position.y) * 0.005;
+                    camera.lookAt(scene.position);
+
+                    renderer.render(scene, camera);
+                };
+
+                animate();
+
+                // Handle window resize
+                const onWindowResize = () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                };
+                window.addEventListener('resize', onWindowResize);
+
+                // Handle mouse movement for camera
+                const onMouseMove = (event) => {
+                    mouseX = (event.clientX - window.innerWidth / 2);
+                    mouseY = (event.clientY - window.innerHeight / 2);
+                };
+                window.addEventListener('mousemove', onMouseMove);
+
+                return () => {
+                    // Cleanup on component unmount
+                    window.removeEventListener('resize', onWindowResize);
+                    window.removeEventListener('mousemove', onMouseMove);
+                    renderer.dispose();
+                    // Dispose of geometry and material to prevent memory leaks
+                    geometry.dispose();
+                    material.dispose();
+                };
+            }, []); // Empty dependency array means this runs once on mount
+
+            const handleSignInSubmit = async (e) => {
+                e.preventDefault();
+                setMessage('');
+                const result = await login(name, password); // Assuming name is used as username/email
+                if (result.success) {
+                    setMessage(result.message);
+                    setIsMessageModalOpen(true);
+                    onLoginSuccess();
+                } else {
+                    setMessage(result.error);
+                    setIsMessageModalOpen(true);
+                }
+            };
+
+            const handleSignUpSubmit = async (e) => {
+                e.preventDefault();
+                setMessage('');
+                if (password !== confirmPassword) {
+                    setMessage('Passwords do not match.');
+                    setIsMessageModalOpen(true);
+                    return;
+                }
+
+                const result = await signup(
+                    name, // Using name as username for signup
+                    password,
+                    location,
+                    skillsOffered.split(',').map(s => s.trim()).filter(s => s),
+                    skillsWanted.split(',').map(s => s.trim()).filter(s => s),
+                    availability.split(',').map(s => s.trim()).filter(s => s), // Ensure availability is handled as array
+                    isPublic
+                );
+
+                if (result.success) {
+                    setMessage(result.message);
+                    setIsMessageModalOpen(true);
+                    setActiveTab('signIn'); // Switch to sign in after successful signup
+                } else {
+                    setMessage(result.error);
+                    setIsMessageModalOpen(true);
+                }
+            };
+
+            return (
+                <div className={`auth-page-container`}>
+                    <canvas id="three-background-canvas" ref={canvasRef}></canvas> {/* Canvas for Three.js background */}
+                    <AnimatedSection className={`auth-card p-8 rounded-xl shadow-lg max-w-md w-full`}>
+                        <div className="flex justify-center mb-6">
+                            <div className={`logo-circle w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold`}>
+                                SS
+                            </div>
+                        </div>
+                        <h2 className={`text-3xl font-bold text-white mb-6 text-center`}>Welcome to SkillSwap</h2>
+
+                        <div className="flex bg-gray-100 rounded-full p-1 mb-6 max-w-xs mx-auto">
+                            <button
+                                onClick={() => setActiveTab('signIn')}
+                                className={`tab-button ${activeTab === 'signIn' ? 'active' : 'inactive'}`}
+                            >
+                                Sign In
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('signUp')}
+                                className={`tab-button ${activeTab === 'signUp' ? 'active' : 'inactive'}`}
+                            >
+                                Sign Up
+                            </button>
+                        </div>
+
+                        {activeTab === 'signIn' ? (
+                            <form onSubmit={handleSignInSubmit} className="space-y-5">
+                                <div className="flex flex-col items-center">
+                                    <label htmlFor="signIn-name" className="block text-sm font-medium text-white mb-1 text-center">Username</label>
+                                    <input
+                                        type="text"
+                                        id="signIn-name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="input-field" /* Styles applied via .input-field CSS class */
+                                        placeholder="Enter your username"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex flex-col items-center relative">
+                                    <label htmlFor="signIn-password" className="block text-sm font-medium text-white mb-1 text-center">Password</label>
+                                    <input
+                                        type={showSignInPassword ? 'text' : 'password'}
+                                        id="signIn-password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="input-field" /* Styles applied via .input-field CSS class */
+                                        placeholder="Enter your password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowSignInPassword(!showSignInPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-2 rounded-full"
+                                    >
+                                        <i className={showSignInPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
+                                    </button>
+                                </div>
+                                <button
+                                    type="submit"
+                                    className={`btn-primary w-full bg-theme-button-bg hover:bg-theme-button-hover`}
+                                >
+                                    Sign In
+                                </button>
+                            </form>
+                        ) : (
+                            <form onSubmit={handleSignUpSubmit} className="space-y-4">
+                                <div className="flex flex-col items-center">
+                                    <label htmlFor="signUp-name" className="block text-sm font-medium text-white mb-1 text-center">Username</label>
+                                    <input
+                                        type="text"
+                                        id="signUp-name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="input-field" /* Styles applied via .input-field CSS class */
+                                        placeholder="Choose a username"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex flex-col items-center relative">
+                                    <label htmlFor="signUp-password" className="block text-sm font-medium text-white mb-1 text-center">Password</label>
+                                    <input
+                                        type={showSignUpPassword ? 'text' : 'password'}
+                                        id="signUp-password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="input-field" /* Styles applied via .input-field CSS class */
+                                        placeholder="Create a password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowSignUpPassword(!showSignUpPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-2 rounded-full"
+                                    >
+                                        <i className={showSignUpPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
+                                    </button>
+                                </div>
+                                <div className="flex flex-col items-center relative">
+                                    <label htmlFor="confirm-password" className="block text-sm font-medium text-white mb-1 text-center">Confirm Password</label>
+                                    <input
+                                        type={showConfirmPassword ? 'text' : 'password'}
+                                        id="confirm-password"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        className="input-field" /* Styles applied via .input-field CSS class */
+                                        placeholder="Confirm your password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-2 rounded-full"
+                                    >
+                                        <i className={showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
+                                    </button>
+                                </div>
+                                <details className="text-sm text-gray-600">
+                                    <summary className="cursor-pointer font-medium text-primary-600 hover:text-primary-700">Optional Profile Details</summary>
+                                    <div className="space-y-4 mt-4">
+                                        <div className="flex flex-col items-center">
+                                            <label htmlFor="signUp-location" className="block text-sm font-medium text-white mb-1 text-center">Location</label>
+                                            <input
+                                                type="text"
+                                                id="signUp-location"
+                                                value={location}
+                                                onChange={(e) => setLocation(e.target.value)}
+                                                className="input-field" /* Styles applied via .input-field CSS class */
+                                                placeholder="City, Country"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <label htmlFor="signUp-skills-offered" className="block text-sm font-medium text-white mb-1 text-center">Skills Offered (comma-separated)</label>
+                                            <input
+                                                type="text"
+                                                id="signUp-skills-offered"
+                                                value={skillsOffered}
+                                                onChange={(e) => setSkillsOffered(e.target.value)}
+                                                className="input-field" /* Styles applied via .input-field CSS class */
+                                                placeholder="e.g., Web Design, Cooking"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <label htmlFor="signUp-skills-wanted" className="block text-sm font-medium text-white mb-1 text-center">Skills Wanted (comma-separated)</label>
+                                            <input
+                                                type="text"
+                                                id="signUp-skills-wanted"
+                                                value={skillsWanted}
+                                                onChange={(e) => setSkillsWanted(e.target.value)}
+                                                className="input-field" /* Styles applied via .input-field CSS class */
+                                                placeholder="e.g., Spanish Lessons, Yoga"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <label htmlFor="signUp-availability" className="block text-sm font-medium text-white mb-1 text-center">Availability</label>
+                                            <input
+                                                type="text"
+                                                id="signUp-availability"
+                                                value={availability}
+                                                onChange={(e) => setAvailability(e.target.value)}
+                                                className="input-field" /* Styles applied via .input-field CSS class */
+                                                placeholder="e.g., Weekends, Evenings"
+                                            />
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                id="signUp-is-public"
+                                                checked={isPublic}
+                                                onChange={(e) => setIsPublic(e.target.checked)}
+                                                className={`h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded`}
+                                            />
+                                            <label htmlFor="signUp-is-public" className="ml-2 block text-sm font-medium text-white">Make Profile Public</label>
+                                        </div>
+                                    </div>
+                                </details>
+
+                                <button
+                                    type="submit"
+                                    className={`btn-primary w-full bg-theme-button-bg hover:bg-theme-button-hover`}
+                                >
+                                    Sign Up
+                                </button>
+                            </form>
+                        )}
+                        <MessageModal isOpen={isMessageModalOpen} onClose={() => setIsMessageModalOpen(false)} message={message} />
+                    </AnimatedSection>
+                </div>
+            );
+        };
+
+        const SkillTag = ({ skill, level, onDelete, isEditable }) => {
+            const theme = useTheme();
+            return (
+                <span className="skill-tag">
+                    {skill}
+                    {level && <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700`}>{level}</span>}
+                    {isEditable && (
+                        <button
+                            onClick={onDelete}
+                            className="ml-2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                        >
+                            <i className="fas fa-times-circle"></i>
+                        </button>
+                    )}
+                </span>
+            );
+        };
+
+        const UserCard = ({ user, onSendSwapRequest, currentUserId }) => {
+            const theme = useTheme();
+            // Placeholder for star rating
+            const renderStars = (rating) => {
+                const fullStars = Math.floor(rating);
+                const hasHalfStar = rating % 1 !== 0;
+                const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                return (
+                    <div className="flex items-center text-yellow-500 text-sm">
+                        {[...Array(fullStars)].map((_, i) => <i key={`full-${i}`} className="fas fa-star"></i>)}
+                        {hasHalfStar && <i className="fas fa-star-half-alt"></i>}
+                        {[...Array(emptyStars)].map((_, i) => <i key={`empty-${i}`} className="far fa-star text-gray-300"></i>)}
+                        <span className="ml-1 text-gray-400">({rating.toFixed(1)})</span> {/* Changed to gray-400 for contrast */}
+                    </div>
+                );
+            };
+
+            // Ensure user.availability is an array before mapping
+            const userAvailability = Array.isArray(user.availability)
+                ? user.availability
+                : (user.availability ? user.availability.split(',').map(s => s.trim()).filter(s => s) : []);
+
+            return (
+                <AnimatedSection className={`bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-start text-theme-text border border-gray-700 card-hover-effect`}>
+                    <div className="flex items-center mb-4 w-full">
+                        <img
+                            src={user.profile_photo || 'https://placehold.co/100x100/A0AEC0/FFFFFF?text=User'}
+                            alt={`${user.name}'s profile`}
+                            className={`w-12 h-12 rounded-full object-cover mr-4 border-2 border-primary-400`}
+                            onError={(e) => e.target.src = 'https://placehold.co/100x100/A0AEC0/FFFFFF?text=User'}
+                        />
+                        <div className="flex-grow">
+                            <h3 className={`text-lg font-semibold text-primary-200`}>{user.name}</h3>
+                            <p className="text-gray-400 text-sm">{user.location || 'Unknown Location'}</p>
+                            {renderStars(user.average_rating || 0)} {/* Display average rating */}
+                        </div>
+                        {user.id !== currentUserId && (
+                            <button
+                                onClick={() => onSendSwapRequest(user.id, user.name)}
+                                className={`btn-primary bg-primary-600 hover:bg-primary-700 text-sm py-2 px-3`}
+                            >
+                                Request Swap
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="w-full mb-4">
+                        <p className="text-sm font-medium text-gray-300 mb-1">Offers:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {user.skills_offered.length > 0 ? user.skills_offered.map((skill, i) => (
+                                <SkillTag key={i} skill={skill} />
+                            )) : <span className="text-gray-500 text-sm">No skills offered.</span>}
+                        </div>
+                        <p className="text-sm font-medium text-gray-300 mt-3 mb-1">Wants:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {user.skills_wanted.length > 0 ? user.skills_wanted.map((skill, i) => (
+                                <SkillTag key={i} skill={skill} />
+                            )) : <span className="text-gray-500 text-sm">No skills wanted.</span>}
+                        </div>
+                    </div>
+
+                    <div className="w-full text-sm text-gray-400">
+                        <p className="font-medium text-gray-300 mb-1">Availability:</p>
+                        <div className="flex flex-wrap gap-2">
+                            {userAvailability.length > 0 ? (
+                                userAvailability.map((item, i) => (
+                                    <span key={i} className="availability-tag">{item}</span>
+                                ))
+                            ) : (
+                                <span className="text-gray-500">Not specified</span>
+                            )}
+                        </div>
+                    </div>
+                </AnimatedSection>
+            );
+        };
+
+        const BrowseUsers = ({ onSendSwapRequest, searchTerm: propSearchTerm }) => {
+            const { userId, userProfile } = useAuth();
+            const theme = useTheme();
+            const [users, setUsers] = useState([]);
+            const [searchTerm, setSearchTerm] = useState(propSearchTerm || ''); // Use propSearchTerm as initial value
+            const [loading, setLoading] = useState(true);
+            const [message, setMessage] = useState('');
+            const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+            const [selectedCategory, setSelectedCategory] = useState('All'); // New state for selected category
+
+            // Update local searchTerm state when propSearchTerm changes (from header search)
+            useEffect(() => {
+                setSearchTerm(propSearchTerm || '');
+            }, [propSearchTerm]);
+
+            useEffect(() => {
+                const fetchUsers = async () => {
+                    setLoading(true);
+                    try {
+                        const response = await fetch(`${BASE_URL}/api/users?searchTerm=${encodeURIComponent(searchTerm)}`);
+                        const data = await response.json();
+                        if (response.ok) {
+                            // Sort users to show current user's profile first if it's public
+                            const sortedUsers = data.sort((a, b) => {
+                                if (a.id === userId) return -1;
+                                if (b.id === userId) return 1;
+                                return 0;
+                            });
+                            setUsers(sortedUsers);
+                        } else {
+                            setMessage(`Failed to load users: ${data.error || response.statusText}`);
+                            setIsMessageModalOpen(true);
+                        }
+                    } catch (error) {
+                        console.error("Network error fetching users:", error.message);
+                        setMessage(`Failed to load users: ${error.message}. Please ensure the backend server is running.`);
+                        setIsMessageModalOpen(true);
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+                fetchUsers();
+            }, [searchTerm, userId]); // Re-fetch when searchTerm or userId changes
+
+            // Filter users by selected category
+            const filteredUsers = selectedCategory === 'All'
+                ? users
+                : users.filter(user =>
+                    user.skills_offered.some(skill => skill.toLowerCase().includes(selectedCategory.toLowerCase())) ||
+                    user.skills_wanted.some(skill => skill.toLowerCase().includes(selectedCategory.toLowerCase()))
+                );
+
+
+            if (loading) return <LoadingSpinner />;
+            if (!userProfile) return <p className={`text-center text-theme-text mt-8`}>Please complete your profile to browse other users.</p>;
+            if (userProfile.is_banned) return <p className="text-center text-red-600 font-bold text-xl mt-8">You have been banned from the platform.</p>;
+
+            // Placeholder for Dashboard Stats
+            const dashboardStats = [
+                { label: "Active Users", value: users.length, change: "+4%", icon: "fas fa-users", color: "text-blue-400" },
+                { label: "Skills Available", value: 120, change: "+12%", icon: "fas fa-star", color: "text-yellow-400" }, // Placeholder values
+                { label: "Successful Swaps", value: 0, change: "0", icon: "fas fa-exchange-alt", color: "text-green-400" }, // Placeholder values
+                { label: "Average Rating", value: userProfile.average_rating ? userProfile.average_rating.toFixed(1) : 'N/A', change: "", icon: "fas fa-chart-line", color: "text-purple-400" }, // Placeholder values
+            ];
+
+
+            return (
+                <div className="p-6">
+                    {/* Hero Section */}
+                    <div className={`bg-gradient-to-br from-primary-600 to-primary-500 rounded-xl p-10 mb-10 text-white shadow-lg`}>
+                        <h2 className="text-4xl font-bold mb-4 text-white">Share Skills, Build Community</h2>
+                        <p className="text-lg mb-6 max-w-2xl text-white">Connect with talented individuals and exchange knowledge. Learn something new while teaching what you know best.</p>
+                        <div className="flex space-x-4">
+                            <button
+                                onClick={() => {
+                                    // This button should ideally navigate to a "post skill" or "profile edit" section
+                                    // For now, we'll just show a message.
+                                    setMessage("This feature would allow you to post your skills!");
+                                    setIsMessageModalOpen(true);
+                                }}
+                                className={`btn-primary bg-white text-primary-600 hover:bg-gray-100`}
+                            >
+                                <i className="fas fa-plus mr-2"></i> Post Your Skills
+                            </button>
+                            <button
+                                onClick={() => {
+                                    // This button already leads to the browse page, so it can be a no-op or scroll to section
+                                    setMessage("You are already browsing skills!");
+                                    setIsMessageModalOpen(true);
+                                }}
+                                className={`btn-secondary border border-white text-white hover:bg-white hover:text-primary-600`}
+                            >
+                                Browse Skills
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Dashboard Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                        {dashboardStats.map((stat, index) => (
+                            <AnimatedSection key={index} className="bg-gray-800 rounded-xl shadow-md p-6 flex items-center justify-between border border-gray-700 card-hover-effect">
+                                <div>
+                                    <p className="text-gray-400 text-sm">{stat.label}</p>
+                                    <h3 className={`text-2xl font-bold text-gray-200 mt-1`}>{stat.value}</h3>
+                                    <p className={`text-xs ${stat.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>{stat.change}</p>
+                                </div>
+                                <div className={`text-3xl ${stat.color}`}>
+                                    <i className={stat.icon}></i>
+                                </div>
+                            </AnimatedSection>
+                        ))}
+                    </div>
+
+                    <h2 className={`text-2xl font-bold text-gray-200 mb-6`}>Discover Skills & People</h2>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {['All', 'Programming', 'Design', 'Marketing', 'Creative', 'Language', 'Business'].map(category => (
+                            <button
+                                key={category}
+                                onClick={() => setSelectedCategory(category)}
+                                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+                                    selectedCategory === category
+                                        ? 'bg-primary-600 text-white'
+                                        : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                                }`}
+                            >
+                                {category}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="mb-8 max-w-xl mx-auto">
+                        <input
+                            type="text"
+                            placeholder="Search skills, people, or trades..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                        />
+                    </div>
+                    {filteredUsers.length === 0 ? (
+                        <p className={`text-center text-gray-300`}>No public profiles found or matching your search.</p>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredUsers.map(user => (
+                                <UserCard
+                                    key={user.id}
+                                    user={user}
+                                    onSendSwapRequest={onSendSwapRequest}
+                                    currentUserId={userId}
+                                />
+                            ))}
+                        </div>
+                    )}
+                    <MessageModal isOpen={isMessageModalOpen} onClose={() => setIsMessageModalOpen(false)} message={message} />
+                </div>
+            );
+        };
+
+        const SwapRequestForm = ({ isOpen, onClose, recipientId, recipientName }) => {
+            const { userId, userProfile } = useAuth();
+            const theme = useTheme();
+            const [skillOffered, setSkillOffered] = useState('');
+            const [skillWanted, setSkillWanted] = useState('');
+            const [message, setMessage] = useState('');
+            const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+
+            useEffect(() => {
+                if (userProfile) {
+                    setSkillOffered(userProfile.skills_offered?.[0] || '');
+                    setSkillWanted(userProfile.skills_wanted?.[0] || '');
+                }
+            }, [userProfile]);
+
+            const handleSubmit = useCallback(async (e) => {
+                e.preventDefault();
+                if (!userId || !userProfile) {
+                    setMessage('You must be logged in and have a profile to send a swap request.');
+                    setIsMessageModalOpen(true);
+                    return;
+                }
+                if (!skillOffered || !skillWanted) {
+                    setMessage('Please specify a skill you offer and a skill you want.');
+                    setIsMessageModalOpen(true);
+                    return;
+                }
+                if (userId === recipientId) {
+                    setMessage('You cannot send a swap request to yourself.');
+                    setIsMessageModalOpen(true);
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${BASE_URL}/api/swap_requests`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            senderId: userId,
+                            senderName: userProfile.name,
+                            receiverId: recipientId,
+                            receiverName: recipientName,
+                            skillOffered,
+                            skillWanted,
+                        }),
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        setMessage('Swap request sent successfully!');
+                        setIsMessageModalOpen(true);
+                        onClose();
+                    } else {
+                        console.error("Error sending swap request:", data.error);
+                        setMessage(`Failed to send swap request: ${data.error || response.statusText}`);
+                        setIsMessageModalOpen(true);
+                    }
+                } catch (error) {
+                    console.error("Network error sending swap request:", error.message);
+                    setMessage(`Failed to send swap request: ${error.message}. Please ensure the backend server is running.`);
+                    setIsMessageModalOpen(true);
+                }
+            }, [userId, userProfile, skillOffered, skillWanted, recipientId, recipientName, onClose]);
+
+            return (
+                <Modal isOpen={isOpen} onClose={onClose} title={`Request Swap with ${recipientName}`}>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="flex flex-col items-center">
+                            <label htmlFor="skillOffered" className="block text-sm font-medium text-gray-700 text-center">Skill you are offering</label>
+                            <input
+                                type="text"
+                                id="skillOffered"
+                                value={skillOffered}
+                                onChange={(e) => setSkillOffered(e.target.value)}
+                                className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                                list="skillsOfferedList"
+                                required
+                            />
+                            {userProfile?.skills_offered && (
+                                <datalist id="skillsOfferedList">
+                                    {userProfile.skills_offered.map((skill, index) => (
+                                        <option key={index} value={skill} />
+                                    ))}
+                                </datalist>
+                            )}
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <label htmlFor="skillWanted" className="block text-sm font-medium text-gray-700 text-center">Skill you are requesting</label>
+                            <input
+                                type="text"
+                                id="skillWanted"
+                                value={skillWanted}
+                                onChange={(e) => setSkillWanted(e.target.value)}
+                                className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                                list="skillsWantedList"
+                                required
+                            />
+                            {userProfile?.skills_wanted && (
+                                <datalist id="skillsWantedList">
+                                    {userProfile.skills_wanted.map((skill, index) => (
+                                        <option key={index} value={skill} />
+                                    ))}
+                                </datalist>
+                            )}
+                        </div>
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="btn-secondary bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className={`btn-primary bg-theme-button-bg hover:bg-theme-button-hover`}
+                            >
+                                Send Request
+                            </button>
+                        </div>
+                    </form>
+                    <MessageModal isOpen={isMessageModalOpen} onClose={() => setIsMessageModalOpen(false)} message={message} />
+                </Modal>
+            );
+        };
+
+        const SwapRequests = () => {
+            const { userId, userProfile } = useAuth();
+            const theme = useTheme();
+            const [requests, setRequests] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [message, setMessage] = useState('');
+            const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+            const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+            const [currentSwapForFeedback, setCurrentSwapForFeedback] = useState(null);
+            const [activeTab, setActiveTab] = useState('received'); // 'received' or 'sent'
+
+            const fetchRequests = useCallback(async () => {
+                if (!userId) {
+                    setLoading(false); // Stop loading if no user ID
+                    return;
+                }
+                setLoading(true);
+                try {
+                    const response = await fetch(`${BASE_URL}/api/swap_requests/${userId}`);
+                    const data = await response.json();
+                    if (response.ok) {
+                        setRequests(data);
+                    } else {
+                        setMessage(`Failed to load requests: ${data.error || response.statusText}`);
+                        setIsMessageModalOpen(true);
+                    }
+                } catch (error) {
+                    console.error("Network error fetching swap requests:", error.message);
+                    setMessage(`Failed to load requests: ${error.message}. Please ensure the backend server is running.`);
+                    setIsMessageModalOpen(true);
+                } finally {
+                    setLoading(false);
+                }
+            }, [userId]);
+
+            useEffect(() => {
+                fetchRequests();
+                // Set up a polling mechanism to simulate real-time updates
+                const interval = setInterval(fetchRequests, 5000); // Poll every 5 seconds
+                return () => clearInterval(interval);
+            }, [fetchRequests]);
+
+            const handleStatusUpdate = useCallback(async (requestId, newStatus) => {
+                try {
+                    const response = await fetch(`${BASE_URL}/api/swap_requests/${requestId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus }),
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        setMessage(`Request ${newStatus} successfully!`);
+                        setIsMessageModalOpen(true);
+                        if (newStatus === 'accepted') {
+                            const acceptedReq = requests.find(req => req.id === requestId);
+                            if (acceptedReq) {
+                                setCurrentSwapForFeedback(acceptedReq);
+                                setShowFeedbackModal(true);
+                            }
+                        }
+                        fetchRequests(); // Re-fetch requests to update UI
+                    } else {
+                        console.error(`Error updating request status to ${newStatus}:`, data.error);
+                        setMessage(`Failed to ${newStatus} request: ${data.error || response.statusText}`);
+                        setIsMessageModalOpen(true);
+                    }
+                } catch (error) {
+                    console.error(`Network error updating request status to ${newStatus}:`, error.message);
+                    setMessage(`Failed to ${newStatus} request: ${error.message}. Please ensure the backend server is running.`);
+                    setIsMessageModalOpen(true);
+                }
+            }, [requests, fetchRequests]);
+
+            const handleDeleteRequest = useCallback(async (requestId) => {
+                try {
+                    const response = await fetch(`${BASE_URL}/api/swap_requests/${requestId}`, {
+                        method: 'DELETE',
+                    });
+                    if (response.ok) {
+                        setMessage('Request deleted successfully!');
+                        setIsMessageModalOpen(true);
+                        fetchRequests(); // Re-fetch requests to update UI
+                    } else {
+                        const data = await response.json();
+                        console.error("Error deleting request:", data.error);
+                        setMessage(`Failed to delete request: ${data.error || response.statusText}`);
+                        setIsMessageModalOpen(true);
+                    }
+                } catch (error) {
+                    console.error("Network error deleting request:", error.message);
+                    setMessage(`Failed to delete request: ${error.message}. Please ensure the backend server is running.`);
+                    setIsMessageModalOpen(true);
+                }
+            }, [fetchRequests]);
+
+            const handleFeedbackSubmit = useCallback(async (swapId, rating, comment) => {
+                try {
+                    if (!currentSwapForFeedback) {
+                        setMessage('No swap selected for feedback.');
+                        setIsMessageModalOpen(true);
+                        return;
+                    }
+                    const response = await fetch(`${BASE_URL}/api/feedback`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            swapRequestId: swapId,
+                            giverId: userId,
+                            receiverId: currentSwapForFeedback.receiver_id === userId ? currentSwapForFeedback.sender_id : currentSwapForFeedback.receiver_id,
+                            rating,
+                            comment,
+                        }),
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        setMessage('Feedback submitted successfully!');
+                        setIsMessageModalOpen(true);
+                        setShowFeedbackModal(false);
+                        setCurrentSwapForFeedback(null);
+                    } else {
+                        console.error("Error submitting feedback:", data.error);
+                        setMessage(`Failed to submit feedback: ${data.error || response.statusText}`);
+                        setIsMessageModalOpen(true);
+                    }
+                } catch (error) {
+                    console.error("Network error submitting feedback:", error.message);
+                    setMessage(`Failed to submit feedback: ${error.message}. Please ensure the backend server is running.`);
+                    setIsMessageModalOpen(true);
+                }
+            }, [userId, currentSwapForFeedback]);
+
+            if (loading) return <LoadingSpinner />;
+            if (!userProfile) return <p className={`text-center text-theme-text mt-8`}>Please complete your profile to view swap requests.</p>;
+            if (userProfile.is_banned) return <p className="text-center text-red-600 font-bold text-xl mt-8">You have been banned from the platform.</p>;
+
+            const receivedRequests = requests.filter(req => req.receiver_id === userId);
+            const sentRequests = requests.filter(req => req.sender_id === userId);
+
+            const renderStars = (rating) => {
+                const fullStars = Math.floor(rating);
+                const hasHalfStar = rating % 1 !== 0;
+                const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                return (
+                    <div className="flex items-center text-yellow-500 text-sm">
+                        {[...Array(fullStars)].map((_, i) => <i key={`full-${i}`} className="fas fa-star"></i>)}
+                        {hasHalfStar && <i className="fas fa-star-half-alt"></i>}
+                        {[...Array(emptyStars)].map((_, i) => <i key={`empty-${i}`} className="far fa-star text-gray-300"></i>)}
+                        <span className="ml-1 text-gray-400">({rating.toFixed(1)})</span> {/* Changed to gray-400 for contrast */}
+                    </div>
+                );
+            };
+
+            const RequestCard = ({ req, isSender }) => {
+                const statusColor = {
+                    pending: 'bg-yellow-100 text-yellow-800',
+                    accepted: 'bg-green-100 text-green-800',
+                    rejected: 'bg-red-100 text-red-800',
+                };
+                const statusText = {
+                    pending: 'Pending',
+                    accepted: 'Accepted',
+                    rejected: 'Declined',
+                };
+
+                return (
+                    <div className="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700 flex flex-col card-hover-effect">
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="flex items-center">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3 ${isSender ? 'bg-primary-600' : 'bg-green-600'}`}>
+                                    {isSender ? req.receiver_name[0] : req.sender_name[0]}
+                                </div>
+                                <div>
+                                    <p className="font-semibold text-gray-200">{isSender ? req.receiver_name : req.sender_name}</p>
+                                    {renderStars(req.average_rating || 0)} {/* Placeholder for rating */}
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColor[req.status]}`}>
+                                    {statusText[req.status]}
+                                </span>
+                                <p className="text-xs text-gray-500 mt-1">{new Date(req.created_at).toLocaleDateString()} {new Date(req.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <p className="text-sm font-medium text-gray-300">Offering</p>
+                                <div className="flex flex-wrap gap-2 mt-1">
+                                    <SkillTag skill={req.skill_offered} />
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-300">Wants</p>
+                                <div className="flex flex-wrap gap-2 mt-1">
+                                    <SkillTag key={i} skill={req.skill_wanted} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <p className="text-sm text-gray-400 mb-4">
+                            {/* Placeholder for message/note */}
+                            {isSender ? `You requested to swap "${req.skill_offered}" for "${req.skill_wanted}".` :
+                                         `"${req.sender_name}" wants to swap "${req.skill_offered}" for your "${req.skill_wanted}".`}
+                        </p>
+
+                        <div className="mt-auto flex justify-end space-x-2">
+                            {req.receiver_id === userId && req.status === 'pending' && (
+                                <>
+                                    <button
+                                        onClick={() => handleStatusUpdate(req.id, 'accepted')}
+                                        className={`btn-primary bg-primary-600 hover:bg-primary-700 text-sm py-2 px-3`}
+                                    >
+                                        <i className="fas fa-check mr-1"></i> Accept
+                                    </button>
+                                    <button
+                                        onClick={() => handleStatusUpdate(req.id, 'rejected')}
+                                        className="btn-secondary bg-red-100 text-red-600 hover:bg-red-200 text-sm py-2 px-3"
+                                    >
+                                        <i className="fas fa-times mr-1"></i> Decline
+                                    </button>
+                                </>
+                            )}
+                            {req.sender_id === userId && req.status === 'pending' && (
+                                <button
+                                    onClick={() => handleDeleteRequest(req.id)}
+                                    className="btn-secondary bg-gray-700 text-gray-200 hover:bg-gray-600 text-sm py-2 px-3"
+                                >
+                                    Cancel Request
+                                </button>
+                            )}
+                            {req.status === 'accepted' && (
+                                <button
+                                    onClick={() => { setCurrentSwapForFeedback(req); setShowFeedbackModal(true); }}
+                                    className={`btn-secondary bg-secondary-100 text-secondary-700 hover:bg-secondary-200 text-sm py-2 px-3`}
+                                >
+                                    Give Feedback
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+
+            return (
+                <div className="p-6">
+                    <h2 className={`text-2xl font-bold text-gray-200 mb-6`}>Skill Swap Requests</h2>
+
+                    {/* Updated tab navigation for My Requests */}
+                    <div className="flex bg-gray-700 rounded-full p-1 mb-6 max-w-xs mx-auto">
+                        <button
+                            onClick={() => setActiveTab('received')}
+                            className={`tab-button ${activeTab === 'received' ? 'active' : 'inactive'}`}
+                        >
+                            Received ({receivedRequests.length})
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('sent')}
+                            className={`tab-button ${activeTab === 'sent' ? 'active' : 'inactive'}`}
+                        >
+                            Sent ({sentRequests.length})
+                        </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-6">
+                        {activeTab === 'received' && (
+                            receivedRequests.length === 0 ? (
+                                <p className={`text-center text-gray-300`}>No received swap requests.</p>
+                            ) : (
+                                receivedRequests.map(req => <RequestCard key={req.id} req={req} isSender={false} />)
+                            )
+                        )}
+                        {activeTab === 'sent' && (
+                            sentRequests.length === 0 ? (
+                                <p className={`text-center text-gray-300`}>No sent swap requests.</p>
+                            ) : (
+                                sentRequests.map(req => <RequestCard key={req.id} req={req} isSender={true} />)
+                            )
+                        )}
+                    </div>
+
+                    <FeedbackModal
+                        isOpen={showFeedbackModal}
+                        onClose={() => setShowFeedbackModal(false)}
+                        onSubmit={handleFeedbackSubmit}
+                        swap={currentSwapForFeedback}
+                    />
+                    <MessageModal isOpen={isMessageModalOpen} onClose={() => setIsMessageModalOpen(false)} message={message} />
+                </div>
+            );
+        };
+
+        const AddSkillModal = ({ isOpen, onClose, onAddSkill, type }) => {
+            const [skillName, setSkillName] = useState('');
+            const [message, setMessage] = useState('');
+            const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+            const theme = useTheme(); // Access theme context
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (skillName.trim()) {
+                    onAddSkill(skillName.trim());
+                    setSkillName('');
+                    onClose();
+                } else {
+                    setMessage('Skill name cannot be empty.');
+                    setIsMessageModalOpen(true);
+                }
+            };
+
+            return (
+                <Modal isOpen={isOpen} onClose={onClose} title={`Add Skill to ${type === 'offer' ? 'Skills I Offer' : 'Skills I Want to Learn'}`}>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="flex flex-col items-center">
+                            <label htmlFor="skillName" className={`block text-sm font-medium text-gray-200 mb-1 text-center`}>Skill Name</label> {/* Adjusted text color */}
+                            <input
+                                type="text"
+                                id="skillName"
+                                value={skillName}
+                                onChange={(e) => setSkillName(e.target.value)}
+                                className={`input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500`} /* Adjusted input field styles */
+                                placeholder="e.g., Web Development"
+                                required
+                            />
+                        </div>
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="btn-secondary bg-gray-700 text-gray-200 hover:bg-gray-600" /* Adjusted secondary button */
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className={`btn-primary bg-theme-button-bg hover:bg-theme-button-hover`}
+                            >
+                                Add Skill
+                            </button>
+                        </div>
+                    </form>
+                    <MessageModal isOpen={isMessageModalOpen} onClose={() => setIsMessageModalOpen(false)} message={message} />
+                </Modal>
+            );
+        };
+
+
+        const ProfilePage = ({ userProfile, userId, onProfileUpdate }) => {
+            const theme = useTheme();
+            const [name, setName] = useState(userProfile?.name || '');
+            const [location, setLocation] = useState(userProfile?.location || '');
+            const [bio, setBio] = useState(userProfile?.bio || ''); // Added bio field
+            const [profilePhoto, setProfilePhoto] = useState(userProfile?.profile_photo || 'https://placehold.co/100x100/A0AEC0/FFFFFF?text=User');
+            const [selectedFile, setSelectedFile] = useState(null);
+            const [skillsOffered, setSkillsOffered] = useState(userProfile?.skills_offered || []);
+            const [skillsWanted, setSkillsWanted] = useState(userProfile?.skills_wanted || []);
+            // Ensure availability is always an array for local state
+            const [availability, setAvailability] = useState(Array.isArray(userProfile?.availability) ? userProfile.availability.join(', ') : (userProfile?.availability || ''));
+            const [isPublic, setIsPublic] = useState(userProfile?.is_public ?? true);
+            const [selectedTheme, setSelectedTheme] = useState(userProfile?.theme || 'purple');
+            const [message, setMessage] = useState('');
+            const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+            const [isGeneratingBio, setIsGeneratingBio] = useState(false); // New state for loading indicator
+            const [showAddSkillModal, setShowAddSkillModal] = useState(false); // State for AddSkillModal
+            const [currentSkillType, setCurrentSkillType] = useState(''); // 'offer' or 'want'
+
+            // Availability options for checkboxes
+            const availabilityOptions = ['Weekdays', 'Weekends', 'Mornings', 'Afternoons', 'Evenings', 'Flexible'];
+
+            useEffect(() => {
+                if (userProfile) {
+                    setName(userProfile.name || '');
+                    setLocation(userProfile.location || '');
+                    setBio(userProfile.bio || '');
+                    setProfilePhoto(userProfile.profile_photo || 'https://placehold.co/100x100/A0AEC0/FFFFFF?text=User');
+                    setSkillsOffered(userProfile.skills_offered || []);
+                    setSkillsWanted(userProfile.skills_wanted || []);
+                    // Ensure availability is always an array when setting state from prop
+                    setAvailability(Array.isArray(userProfile.availability) ? userProfile.availability.join(', ') : (userProfile.availability || ''));
+                    setIsPublic(userProfile.is_public ?? true);
+                    setSelectedTheme(userProfile.theme || 'purple');
+                }
+            }, [userProfile]);
+
+            const handleFileChange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    setSelectedFile(file);
+                    setProfilePhoto(URL.createObjectURL(file));
+                } else {
+                    setSelectedFile(null);
+                    // If file is cleared, revert to current profile photo from userProfile or default placeholder
+                    setProfilePhoto(userProfile?.profile_photo || 'https://placehold.co/100x100/A0AEC0/FFFFFF?text=User');
+                }
+            };
+
+            const handleUrlChange = (e) => {
+                const url = e.target.value;
+                setProfilePhoto(url);
+                setSelectedFile(null); // Clear selected file if URL is being used
+            };
+
+            const handleOpenAddSkillModal = (type) => {
+                setCurrentSkillType(type);
+                setShowAddSkillModal(true);
+            };
+
+            const handleAddSkill = (skillName) => {
+                if (currentSkillType === 'offer') {
+                    setSkillsOffered(prev => [...prev, skillName]);
+                } else {
+                    setSkillsWanted(prev => [...prev, skillName]);
+                }
+            };
+
+            const handleDeleteSkill = (type, skillToDelete) => {
+                if (type === 'offer') {
+                    setSkillsOffered(prev => prev.filter(skill => skill !== skillToDelete));
+                } else {
+                    setSkillsWanted(prev => prev.filter(skill => skill !== skillToDelete));
+                }
+            };
+
+            const handleAvailabilityChange = (option) => {
+                setAvailability(prev => {
+                    const current = prev.split(',').map(s => s.trim()).filter(s => s);
+                    if (current.includes(option)) {
+                        return current.filter(item => item !== option).join(', ');
+                    } else {
+                        return [...current, option].join(', ');
+                    }
+                });
+            };
+
+            const handleGenerateBio = useCallback(async () => {
+                setIsGeneratingBio(true);
+                setMessage('');
+                try {
+                    const prompt = `Generate a concise and engaging professional bio for a Skill Swap platform user. ` +
+                                   `They offer the following skills: ${skillsOffered.length > 0 ? skillsOffered.join(', ') : 'None specified'}. ` +
+                                   `They want to learn the following skills: ${skillsWanted.length > 0 ? skillsWanted.join(', ') : 'None specified'}. ` +
+                                   `The bio should highlight their willingness to share and learn, and invite others to connect.`;
+
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // Canvas will automatically provide this in runtime
+
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const generatedText = result.candidates[0].content.parts[0].text;
+                        setBio(generatedText);
+                        setMessage('Bio generated successfully!');
+                    } else {
+                        setMessage('Failed to generate bio. Please try again.');
+                        console.error("Gemini API response unexpected:", result);
+                    }
+                } catch (error) {
+                    console.error("Error calling Gemini API:", error);
+                    setMessage(`Error generating bio: ${error.message}.`);
+                } finally {
+                    setIsGeneratingBio(false);
+                    setIsMessageModalOpen(true);
+                }
+            }, [skillsOffered, skillsWanted]);
+
+
+            const handleSubmit = useCallback(async (e) => {
+                e.preventDefault();
+                if (!userId) {
+                    setMessage('User not authenticated.');
+                    setIsMessageModalOpen(true);
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('location', location);
+                formData.append('bio', bio); // Append bio
+                formData.append('skillsOffered', skillsOffered.join(','));
+                formData.append('skillsWanted', skillsWanted.join(','));
+                formData.append('availability', availability);
+                formData.append('isPublic', isPublic ? '1' : '0');
+                formData.append('theme', selectedTheme);
+
+                if (selectedFile) {
+                    formData.append('profilePhoto', selectedFile);
+                } else {
+                    // If no file is selected, send the current profilePhoto state as profilePhotoUrl
+                    // This handles cases where user clears the URL or keeps an existing one
+                    formData.append('profilePhotoUrl', profilePhoto || '');
+                }
+
+                try {
+                    const response = await fetch(`${BASE_URL}/api/profile/${userId}`, {
+                        method: 'PUT',
+                        // IMPORTANT: Do NOT set 'Content-Type' header when sending FormData.
+                        // The browser will automatically set it correctly as multipart/form-data.
+                        // headers: { 'Content-Type': 'multipart/form-data' }, // This line should NOT be here
+                        body: formData,
+                    });
+                    const data = await response.json(); // Attempt to parse JSON response
+                    if (response.ok) {
+                        setMessage('Profile updated successfully!');
+                        setIsMessageModalOpen(true);
+                        onProfileUpdate(data);
+                        // Clean up URL.createObjectURL if a file was selected
+                        if (selectedFile) {
+                            URL.revokeObjectURL(profilePhoto);
+                        }
+                        setSelectedFile(null); // Reset selected file state
+                    } else {
+                        console.error("Error updating profile:", data.error || response.statusText);
+                        setMessage(`Failed to update profile: ${data.error || response.statusText}`);
+                        setIsMessageModalOpen(true);
+                    }
+                } catch (error) {
+                    console.error("Network error updating profile:", error.message);
+                    setMessage(`Failed to update profile: ${error.message}. Please ensure the backend server is running and responding with valid JSON.`);
+                    setIsMessageModalOpen(true);
+                }
+            }, [userId, name, location, bio, profilePhoto, selectedFile, skillsOffered, skillsWanted, availability, isPublic, selectedTheme, onProfileUpdate]);
+
+            return (
+                <div className="p-6">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className={`text-2xl font-bold text-gray-200`}>My Profile</h2>
+                        <span className="text-sm text-gray-400 flex items-center">
+                            <i className="fas fa-globe mr-2"></i> Public Profile
+                        </span>
+                    </div>
+
+                    {/* Profile Information Card */}
+                    <AnimatedSection className="bg-gray-800 rounded-xl shadow-lg p-6 mb-6 border border-gray-700 card-hover-effect">
+                        <h3 className="text-lg font-semibold text-gray-200 mb-4">Profile Information</h3>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex flex-col items-center">
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1 text-center">Full Name</label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                                        required
+                                    />
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <label htmlFor="location" className="block text-sm font-medium text-gray-300 mb-1 text-center">Location</label>
+                                    <input
+                                        type="text"
+                                        id="location"
+                                        value={location}
+                                        onChange={(e) => setLocation(e.target.value)}
+                                        className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                                        placeholder="City, State/Country"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <label htmlFor="bio" className="block text-sm font-medium text-gray-300 mb-1 text-center">Bio</label>
+                                <textarea
+                                    id="bio"
+                                    value={bio}
+                                    onChange={(e) => setBio(e.target.value)}
+                                    rows="3"
+                                    className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                                    placeholder="Tell others about yourself and your expertise..."
+                                ></textarea>
+                                <button
+                                    type="button"
+                                    onClick={handleGenerateBio}
+                                    disabled={isGeneratingBio}
+                                    className={`mt-2 btn-secondary bg-primary-700 text-primary-200 hover:bg-primary-800 text-sm py-2 px-3 ${isGeneratingBio ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                    {isGeneratingBio ? (
+                                        <>
+                                            <i className="fas fa-spinner fa-spin mr-2"></i> Generating...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="fas fa-sparkles mr-2"></i> Generate Bio
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Profile Photo Section */}
+                            <div className="border border-gray-700 p-4 rounded-xl bg-gray-900">
+                                <h4 className="text-md font-medium text-gray-200 mb-3 text-center">Profile Photo</h4>
+                                <div className="flex flex-col items-center mb-4">
+                                    {profilePhoto && (
+                                        <img
+                                            src={profilePhoto}
+                                            alt="Profile Preview"
+                                            className="w-24 h-24 rounded-full object-cover mb-2 border-2 border-primary-400"
+                                            onError={(e) => e.target.src = 'https://placehold.co/100x100/A0AEC0/FFFFFF?text=User'}
+                                        />
+                                    )}
+                                    <p className="text-sm text-gray-400">Current / Preview</p>
+                                </div>
+
+                                <div className="flex flex-col items-center">
+                                    <label htmlFor="profilePhotoUpload" className="block text-sm font-medium text-gray-300 mb-1 text-center">Upload Photo from Device</label>
+                                    <input
+                                        type="file"
+                                        id="profilePhotoUpload"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-900 file:text-blue-200 hover:file:bg-blue-800"
+                                    />
+                                    <p className="mt-1 text-xs text-gray-500">Choose an image file (JPG, PNG, GIF) from your computer.</p>
+                                </div>
+
+                                <div className="mt-4 flex flex-col items-center">
+                                    <label htmlFor="profilePhotoUrl" className="block text-sm font-medium text-gray-300 mb-1 text-center">Or Paste Photo URL</label>
+                                    <input
+                                        type="url"
+                                        id="profilePhotoUrl"
+                                        value={selectedFile ? '' : profilePhoto || ''} /* Ensure value is empty string if null */
+                                        onChange={handleUrlChange}
+                                        disabled={!!selectedFile}
+                                        className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500 disabled:bg-gray-800 disabled:text-gray-500"
+                                        placeholder="e.g., https://example.com/your-photo.jpg"
+                                    />
+                                    <p className="mt-1 text-xs text-gray-500">Enter a direct link to an image file. Uploading a file will override this field.</p>
+                                </div>
+                            </div>
+                            {/* End Profile Photo Section */}
+
+                            <div className="flex flex-col items-center">
+                                <label className="block text-sm font-medium text-gray-300 mb-2 text-center">Availability</label>
+                                <div className="flex flex-wrap gap-2 justify-center">
+                                    {availabilityOptions.map(option => (
+                                        <label key={option} className={`inline-flex items-center px-4 py-2 rounded-full cursor-pointer transition-colors duration-200 ${
+                                            (availability.split(',').map(s => s.trim()).filter(s => s)).includes(option) // Ensure split always works on a string
+                                                ? 'bg-primary-600 text-white'
+                                                : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                                        }`}>
+                                            <input
+                                                type="checkbox"
+                                                className="hidden"
+                                                checked={(availability.split(',').map(s => s.trim()).filter(s => s)).includes(option)} // Ensure split always works on a string
+                                                onChange={() => handleAvailabilityChange(option)}
+                                            />
+                                            {option}
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-center">
+                                <input
+                                    type="checkbox"
+                                    id="isPublic"
+                                    checked={isPublic}
+                                    onChange={(e) => setIsPublic(e.target.checked)}
+                                    className={`h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-600 rounded`}
+                                />
+                                <label htmlFor="isPublic" className="ml-2 block text-sm font-medium text-gray-300">Make Profile Public</label>
+                            </div>
+
+                            {/* Theme Selector */}
+                            <div className="flex flex-col items-center">
+                                <label htmlFor="themeSelector" className="block text-sm font-medium text-gray-300 mb-1 text-center">Choose Theme</label>
+                                <select
+                                    id="themeSelector"
+                                    value={selectedTheme}
+                                    onChange={(e) => setSelectedTheme(e.target.value)}
+                                    className="input-field bg-gray-700 text-white border-gray-600 focus:border-primary-500 focus:ring-primary-500"
+                                >
+                                    {Object.keys(themes).map((themeName) => (
+                                        <option key={themeName} value={themeName}>
+                                            {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className={`btn-primary w-full bg-theme-button-bg hover:bg-theme-button-hover`}
+                            >
+                                Save Profile
+                            </button>
+                        </form>
+                    </AnimatedSection>
+
+                    {/* Skills I Offer Card */}
+                    <AnimatedSection className="bg-gray-800 rounded-xl shadow-lg p-6 mb-6 border border-gray-700 card-hover-effect">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-semibold text-gray-200">Skills I Offer</h3>
+                            <button
+                                onClick={() => handleOpenAddSkillModal('offer')}
+                                className={`btn-secondary bg-primary-700 text-primary-200 hover:bg-primary-800 text-sm py-2 px-3`}
+                            >
+                                <i className="fas fa-plus mr-1"></i> Add Skill
+                            </button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {skillsOffered.length > 0 ? (
+                                skillsOffered.map((skill, i) => (
+                                    <SkillTag key={i} skill={skill} isEditable={true} onDelete={() => handleDeleteSkill('offer', skill)} />
+                                ))
+                            ) : (
+                                <p className="text-gray-400 text-sm">No skills offered yet. Add skills you'd like to share!</p>
+                            )}
+                        </div>
+                    </AnimatedSection>
+
+                    {/* Skills I Want to Learn Card */}
+                    <AnimatedSection className="bg-gray-800 rounded-xl shadow-lg p-6 mb-6 border border-gray-700 card-hover-effect">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-semibold text-gray-200">Skills I Want to Learn</h3>
+                            <button
+                                onClick={() => handleOpenAddSkillModal('want')}
+                                className={`btn-secondary bg-primary-700 text-primary-200 hover:bg-primary-800 text-sm py-2 px-3`}
+                            >
+                                <i className="fas fa-plus mr-1"></i> Add Skill
+                            </button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {skillsWanted.length > 0 ? (
+                                skillsWanted.map((skill, i) => (
+                                    <SkillTag key={i} skill={skill} isEditable={true} onDelete={() => handleDeleteSkill('want', skill)} />
+                                ))
+                            ) : (
+                                <p className="text-gray-400 text-sm">No skills wanted yet. Add skills you'd like to learn!</p>
+                            )}
+                        </div>
+                    </AnimatedSection>
+
+                    <MessageModal isOpen={isMessageModalOpen} onClose={() => setIsMessageModalOpen(false)} message={message} />
+                    <AddSkillModal
+                        isOpen={showAddSkillModal}
+                        onClose={() => setShowAddSkillModal(false)}
+                        onAddSkill={handleAddSkill}
+                        type={currentSkillType}
+                    />
+                </div>
+            );
+        };
+
+        const FeedbackModal = ({ isOpen, onClose, onSubmit, swap }) => {
+            const theme = useTheme();
+            const [rating, setRating] = useState(5);
+            const [comment, setComment] = useState('');
+            const [message, setMessage] = useState('');
+            const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+
+            useEffect(() => {
+                if (isOpen) {
+                    setRating(5);
+                    setComment('');
+                }
+            }, [isOpen]);
+
+            const handleSubmit = useCallback((e) => {
+                e.preventDefault();
+                if (!swap) {
+                    setMessage('No swap selected for feedback.');
+                    setIsMessageModalOpen(true);
+                    return;
+                }
+                onSubmit(swap.id, rating, comment);
+                onClose();
+            }, [onSubmit, onClose, rating, comment, swap]);
+
+            const renderStarsInput = (currentRating) => {
+                return (
+                    <div className="flex justify-center text-yellow-500 text-2xl mb-2">
+                        {[1, 2, 3, 4, 5].map((starValue) => (
+                            <i
+                                key={starValue}
+                                className={`${starValue <= currentRating ? 'fas' : 'far'} fa-star cursor-pointer`}
+                                onClick={() => setRating(starValue)}
+                            ></i>
+                        ))}
+                    </div>
+                );
+            };
+
+            return (
+                <Modal isOpen={isOpen} onClose={onClose} title="Give Feedback">
+                    {swap && (
+                        <p className={`mb-4 text-gray-700`}>
+                            Feedback for swap: <strong>{swap.sender_name}</strong> offered <em>{swap.skill_offered}</em> for <strong>{swap.receiver_name}</strong>'s <em>{swap.skill_wanted}</em>.
+                        </p>
+                    )}
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="flex flex-col items-center">
+                            <label htmlFor="rating" className="block text-sm font-medium text-gray-700 text-center mb-2">Rating</label>
+                            {renderStarsInput(rating)}
+                            <input
+                                type="range"
+                                id="rating"
+                                min="1"
+                                max="5"
+                                value={rating}
+                                onChange={(e) => setRating(parseInt(e.target.value))}
+                                className="mt-1 w-full hidden" // Hidden as we use stars for input
+                            />
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-1 text-center">Comment (Optional)</label>
+                            <textarea
+                                id="comment"
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                rows="4"
+                                className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                            ></textarea>
+                        </div>
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="btn-secondary bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className={`btn-primary bg-theme-button-bg hover:bg-theme-button-hover`}
+                            >
+                                Submit Feedback
+                            </button>
+                        </div>
+                    </form>
+                    <MessageModal isOpen={isMessageModalOpen} onClose={() => setIsMessageModalOpen(false)} message={message} />
+                </Modal>
+            );
+        };
+
+        const AdminPanel = () => {
+            const { userProfile } = useAuth();
+            const theme = useTheme();
+            const [users, setUsers] = useState([]);
+            const [swapRequests, setSwapRequests] = useState([]);
+            const [feedbackLogs, setFeedbackLogs] = useState([]);
+            const [platformMessage, setPlatformMessage] = useState('');
+            const [message, setMessage] = useState('');
+            const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+            const [activeTab, setActiveTab] = useState('users');
+
+            const fetchAdminData = useCallback(async () => {
+                if (!userProfile?.is_admin) return;
+                try {
+                    const [usersRes, swapsRes, feedbackRes, msgRes] = await Promise.all([
+                        fetch(`${BASE_URL}/api/admin/users`),
+                        fetch(`${BASE_URL}/api/admin/swap_requests`),
+                        fetch(`${BASE_URL}/api/feedback`), // Reusing get_all_feedback
+                        fetch(`${BASE_URL}/api/admin/platform_message`)
+                    ]);
+
+                    const [usersData, swapsData, feedbackData, msgData] = await Promise.all([
+                        usersRes.json(),
+                        swapsRes.json(),
+                        feedbackRes.json(),
+                        msgRes.json()
+                    ]);
+
+                    if (usersRes.ok) setUsers(usersData); else console.error("Failed to fetch admin users:", usersData.error || usersRes.statusText);
+                    if (swapsRes.ok) setSwapRequests(swapsData); else console.error("Failed to fetch admin swaps:", swapsData.error || swapsRes.statusText);
+                    if (feedbackRes.ok) setFeedbackLogs(feedbackData); else console.error("Failed to fetch admin feedback:", feedbackData.error || feedbackRes.statusText);
+                    if (msgRes.ok) setPlatformMessage(msgData.message || ''); else console.error("Failed to fetch platform message:", msgData.error || msgRes.statusText);
+
+                } catch (error) {
+                    console.error("Network error fetching admin data:", error.message);
+                    setMessage(`Failed to load admin data: ${error.message}. Please ensure the backend server is running.`);
+                    setIsMessageModalOpen(true);
+                }
+            }, [userProfile]);
+
+            useEffect(() => {
+                fetchAdminData();
+                const interval = setInterval(fetchAdminData, 10000); // Poll admin data every 10 seconds
+                return () => clearInterval(interval);
+            }, [fetchAdminData]);
+
+            const handleBanUser = useCallback(async (userIdToBan, isBannedStatus) => {
+                try {
+                    const response = await fetch(`${BASE_URL}/api/admin/users/${userIdToBan}/ban`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ isBanned: isBannedStatus ? 1 : 0 }),
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        setMessage(data.message);
+                        setIsMessageModalOpen(true);
+                        fetchAdminData(); // Re-fetch data
+                    } else {
+                        console.error("Error banning user:", data.error);
+                        setMessage(`Failed to update ban status: ${data.error || response.statusText}`);
+                        setIsMessageModalOpen(true);
+                    }
+                } catch (error) {
+                    console.error("Network error banning user:", error.message);
+                    setMessage(`Failed to update ban status: ${error.message}. Please ensure the backend server is running.`);
+                    setIsMessageModalOpen(true);
+                }
+            }, [fetchAdminData]);
+
+            const handleSendPlatformMessage = useCallback(async () => {
+                try {
+                    const response = await fetch(`${BASE_URL}/api/admin/platform_message`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: platformMessage }),
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        setMessage(data.message);
+                        setIsMessageModalOpen(true);
+                        fetchAdminData(); // Re-fetch data
+                    } else {
+                        console.error("Error sending platform message:", data.error);
+                        setMessage(`Failed to send message: ${data.error || response.statusText}`);
+                        setIsMessageModalOpen(true);
+                    }
+                } catch (error) {
+                    console.error("Network error sending platform message:", error.message);
+                    setMessage(`Failed to send message: ${error.message}. Please ensure the backend server is running.`);
+                    setIsMessageModalOpen(true);
+                }
+            }, [platformMessage, fetchAdminData]);
+
+            const handleDownloadReport = useCallback((reportType) => {
+                let data;
+                let filename;
+                switch (reportType) {
+                    case 'userActivity':
+                        data = users.map(u => ({
+                            id: u.id,
+                            name: u.name,
+                            location: u.location,
+                            isPublic: u.is_public,
+                            isBanned: u.is_banned,
+                            createdAt: u.created_at,
+                        }));
+                        filename = 'user_activity_report.json';
+                        break;
+                    case 'feedbackLogs':
+                        data = feedbackLogs.map(f => ({
+                            id: f.id,
+                            swapRequestId: f.swap_request_id,
+                            giverId: f.giver_id,
+                            receiverId: f.receiver_id,
+                            rating: f.rating,
+                            comment: f.comment,
+                            createdAt: f.created_at,
+                        }));
+                        filename = 'feedback_logs_report.json';
+                        break;
+                    case 'swapStats':
+                        const swapCounts = swapRequests.reduce((acc, req) => {
+                            acc[req.status] = (acc[req.status] || 0) + 1;
+                            return acc;
+                        }, {});
+                        data = {
+                            totalSwaps: swapRequests.length,
+                            ...swapCounts,
+                            pendingSwaps: swapRequests.filter(req => req.status === 'pending').length,
+                            acceptedSwaps: swapRequests.filter(req => req.status === 'accepted').length,
+                            rejectedSwaps: swapRequests.filter(req => req.status === 'rejected').length,
+                            deletedSwaps: swapRequests.filter(req => req.status === 'deleted').length,
+                        };
+                        filename = 'swap_stats_report.json';
+                        break;
+                    default:
+                        return;
+                }
+
+                const json = JSON.stringify(data, null, 2);
+                const blob = new Blob([json], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                setMessage(`Downloaded ${filename}`);
+                setIsMessageModalOpen(true);
+            }, [users, feedbackLogs, swapRequests]);
+
+            if (!userProfile?.is_admin) {
+                return <p className="text-center text-red-600 font-bold text-xl mt-8">Access Denied: You are not an administrator.</p>;
+            }
+
+            return (
+                <div className="p-6">
+                    <h2 className={`text-2xl font-bold text-gray-200 mb-6`}>Admin Panel</h2>
+
+                    <div className="mb-6 bg-gray-800 rounded-xl shadow-lg p-4 border border-gray-700">
+                        <nav className="flex space-x-8" aria-label="Tabs">
+                            {['users', 'swaps', 'feedback', 'messages', 'reports'].map((tab) => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`${
+                                        activeTab === tab
+                                            ? `border-primary-500 text-primary-200 border-b-2`
+                                            : 'border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-500'
+                                    } whitespace-nowrap py-2 px-1 font-medium text-sm transition-colors duration-200`}
+                                >
+                                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                </button>
+                            ))}
+                        </nav>
+                    </div>
+
+                    {activeTab === 'users' && (
+                        <div className="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700 card-hover-effect">
+                            <h3 className={`text-xl font-semibold text-gray-200 mb-4`}>Manage Users</h3>
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full divide-y divide-gray-700">
+                                    <thead className="bg-gray-700">
+                                        <tr>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>ID</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Name</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Skills Offered</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Skills Wanted</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Status</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-gray-800 divide-y divide-gray-700">
+                                        {users.map(user => (
+                                            <tr key={user.id}>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{user.id.substring(0, 8)}...</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{user.name}</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{user.skills_offered?.join(', ') || 'N/A'}</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{user.skills_wanted?.join(', ') || 'N/A'}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                    {user.is_banned ? <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-800 text-red-200">Banned</span> :
+                                                                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-800 text-green-200">Active</span>}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <button
+                                                        onClick={() => handleBanUser(user.id, !user.is_banned)}
+                                                        className={`px-3 py-1 rounded-md text-white text-xs mr-2 ${user.is_banned ? `bg-primary-600 hover:bg-primary-700` : `bg-red-600 hover:bg-red-700`}`}
+                                                    >
+                                                        {user.is_banned ? 'Unban' : 'Ban'}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'swaps' && (
+                        <div className="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700 card-hover-effect">
+                            <h3 className={`text-xl font-semibold text-gray-200 mb-4`}>Monitor Swaps</h3>
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full divide-y divide-gray-700">
+                                    <thead className="bg-gray-700">
+                                        <tr>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Request ID</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Sender</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Receiver</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Offered</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Wanted</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-gray-800 divide-y divide-gray-700">
+                                        {swapRequests.map(req => (
+                                            <tr key={req.id}>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{req.id.substring(0, 8)}...</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{req.sender_name}</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{req.receiver_name}</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{req.skill_offered}</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{req.skill_wanted}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                                        req.status === 'pending' ? 'bg-yellow-800 text-yellow-200' :
+                                                        req.status === 'accepted' ? 'bg-green-800 text-green-200' :
+                                                        req.status === 'rejected' ? 'bg-red-800 text-red-200' :
+                                                        'bg-gray-700 text-gray-200'
+                                                    }`}>
+                                                        {req.status}
+                                                    </span>
+                                                </td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{new Date(req.created_at).toLocaleDateString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'feedback' && (
+                        <div className="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700 card-hover-effect">
+                            <h3 className={`text-xl font-semibold text-gray-200 mb-4`}>Feedback Logs</h3>
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full divide-y divide-gray-700">
+                                    <thead className="bg-gray-700">
+                                        <tr>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Feedback ID</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Swap ID</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Giver ID</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Receiver ID</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Rating</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Comment</th>
+                                            <th className={`px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider`}>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-gray-800 divide-y divide-gray-700">
+                                        {feedbackLogs.map(feedback => (
+                                            <tr key={feedback.id}>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{feedback.id.substring(0, 8)}...</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{feedback.swap_request_id.substring(0,8)}...</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{feedback.giver_id.substring(0,8)}...</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{feedback.receiver_id.substring(0,8)}...</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{feedback.rating}/5</td>
+                                                <td className={`px-6 py-4 text-sm text-gray-300 max-w-xs truncate`}>{feedback.comment || 'N/A'}</td>
+                                                <td className={`px-6 py-4 whitespace-nowrap text-sm text-gray-300`}>{new Date(feedback.created_at).toLocaleDateString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'messages' && (
+                        <div className="bg-gray-800 rounded-xl shadow-lg p-6 max-w-xl mx-auto border border-gray-700 card-hover-effect">
+                            <h3 className={`text-xl font-semibold text-gray-200 mb-4`}>Send Platform-Wide Message</h3>
+                            <textarea
+                                value={platformMessage}
+                                onChange={(e) => setPlatformMessage(e.target.value)}
+                                rows="5"
+                                className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500 mb-4"
+                                placeholder="Enter message to all users..."
+                            ></textarea>
+                            <button
+                                onClick={handleSendPlatformMessage}
+                                className={`btn-primary w-full bg-theme-button-bg hover:bg-theme-button-hover`}
+                            >
+                                Send Message
+                            </button>
+                        </div>
+                    )}
+
+                    {activeTab === 'reports' && (
+                        <div className="bg-gray-800 rounded-xl shadow-lg p-6 max-w-xl mx-auto text-center border border-gray-700 card-hover-effect">
+                            <h3 className={`text-xl font-semibold text-gray-200 mb-4`}>Download Reports</h3>
+                            <div className="space-y-4">
+                                <button
+                                    onClick={() => handleDownloadReport('userActivity')}
+                                    className={`btn-primary w-full bg-secondary-600 hover:bg-secondary-700`}
+                                >
+                                    Download User Activity Report (JSON)
+                                </button>
+                                <button
+                                    onClick={() => handleDownloadReport('feedbackLogs')}
+                                    className={`btn-primary w-full bg-secondary-600 hover:bg-secondary-700`}
+                                >
+                                    Download Feedback Logs Report (JSON)
+                                </button>
+                                <button
+                                    onClick={() => handleDownloadReport('swapStats')}
+                                    className={`btn-primary w-full bg-secondary-600 hover:bg-secondary-700`}
+                                >
+                                    Download Swap Statistics Report (JSON)
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    <MessageModal isOpen={isMessageModalOpen} onClose={() => setIsMessageModalOpen(false)} message={message} />
+                </div>
+            );
+        };
+
+        // New component for the main app background animation
+        const AppBackgroundAnimation = () => {
+            const canvasRef = useRef(null);
+            let scene, camera, renderer, lines, animationFrameId;
+            let mouseX = 0, mouseY = 0; // Mouse coordinates for cursor follow effect
+            let particles = []; // Array to hold individual particle objects for movement
+
+            useEffect(() => {
+                if (!canvasRef.current) return;
+
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+                renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+
+                // Create a grid of points and connect them with lines
+                const numPoints = 200; // Increased points for more density
+                const spread = 1200; // Increased spread for a larger field
+
+                // Generate particles with unique properties for animation
+                for (let i = 0; i < numPoints; i++) {
+                    const x = (Math.random() - 0.5) * spread;
+                    const y = (Math.random() - 0.5) * spread;
+                    const z = (Math.random() - 0.5) * spread;
+                    const particle = {
+                        position: new THREE.Vector3(x, y, z),
+                        velocity: new THREE.Vector3(
+                            (Math.random() - 0.5) * 0.5, // Slower movement
+                            (Math.random() - 0.5) * 0.5,
+                            (Math.random() - 0.5) * 0.5
+                        ),
+                        originalPosition: new THREE.Vector3(x, y, z), // Store original position for subtle drift
+                        noiseOffset: Math.random() * 1000 // Unique noise offset for each particle
+                    };
+                    particles.push(particle);
+                }
+
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    color: 0x6a6a9a, // A slightly brighter dark blue/purple for better visibility
+                    transparent: true,
+                    opacity: 0.5, // Adjusted opacity for better visibility on dark background
+                    linewidth: 1 // Note: linewidth might not work on all platforms
+                });
+
+                lines = new THREE.Group();
+                // Connect points randomly to form a network
+                for (let i = 0; i < numPoints; i++) {
+                    for (let j = i + 1; j < numPoints; j++) {
+                        if (particles[i].position.distanceTo(particles[j].position) < 250) { // Increased connection distance
+                            const geometry = new THREE.BufferGeometry().setFromPoints([particles[i].position, particles[j].position]);
+                            const line = new THREE.Line(geometry, lineMaterial);
+                            lines.add(line);
+                        }
+                    }
+                }
+                scene.add(lines);
+
+                camera.position.z = 500;
+
+                const animate = () => {
+                    animationFrameId = requestAnimationFrame(animate);
+
+                    // Update particle positions with subtle drift and noise
+                    particles.forEach(p => {
+                        // Apply subtle velocity
+                        p.position.add(p.velocity);
+
+                        // Keep particles within bounds or wrap them around
+                        if (p.position.x > spread / 2) p.position.x = -spread / 2;
+                        if (p.position.x < -spread / 2) p.position.x = spread / 2;
+                        if (p.position.y > spread / 2) p.position.y = -spread / 2;
+                        if (p.position.y < -spread / 2) p.position.y = spread / 2;
+                        if (p.position.z > spread / 2) p.position.z = -spread / 2;
+                        if (p.position.z < -spread / 2) p.position.z = spread / 2;
+
+                        // Add subtle Perlin noise for organic movement
+                        // Using a simple sine wave for demonstration, a Perlin noise library would be better for true "organic"
+                        p.position.x += Math.sin(Date.now() * 0.0001 + p.noiseOffset) * 0.1;
+                        p.position.y += Math.cos(Date.now() * 0.0001 + p.noiseOffset) * 0.1;
+                    });
+
+                    // Re-draw lines based on updated particle positions
+                    lines.children.forEach(line => {
+                        const positionsArray = line.geometry.attributes.position.array;
+                        const startPoint = particles.find(p => p.originalPosition.equals(line.geometry.attributes.position.array.slice(0,3)));
+                        const endPoint = particles.find(p => p.originalPosition.equals(line.geometry.attributes.position.array.slice(3,6)));
+
+                        if (startPoint && endPoint) {
+                            positionsArray[0] = startPoint.position.x;
+                            positionsArray[1] = startPoint.position.y;
+                            positionsArray[2] = startPoint.position.z;
+                            positionsArray[3] = endPoint.position.x;
+                            positionsArray[4] = endPoint.position.y;
+                            positionsArray[5] = endPoint.position.z;
+                            line.geometry.attributes.position.needsUpdate = true;
+                        }
+                    });
+
+
+                    // Rotate the network subtly and add some depth movement
+                    lines.rotation.x += 0.0001;
+                    lines.rotation.y += 0.0002;
+                    lines.rotation.z += 0.00005; // Subtle Z-axis rotation
+
+                    // Subtle camera movement based on mouse
+                    // The camera will gently move towards the mouse position
+                    camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.02;
+                    camera.position.y += (-mouseY * 0.5 - camera.position.y) * 0.02;
+                    camera.lookAt(scene.position);
+
+                    renderer.render(scene, camera);
+                };
+
+                animate();
+
+                const onWindowResize = () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                };
+                window.addEventListener('resize', onWindowResize);
+
+                // Handle mouse movement for camera
+                const onMouseMove = (event) => {
+                    // Normalize mouse coordinates to -1 to +1 range
+                    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                };
+                window.addEventListener('mousemove', onMouseMove);
+
+                return () => {
+                    window.cancelAnimationFrame(animationFrameId);
+                    window.removeEventListener('resize', onWindowResize);
+                    window.removeEventListener('mousemove', onMouseMove);
+                    renderer.dispose();
+                    // Dispose of geometries and materials within the group
+                    lines.children.forEach(child => {
+                        child.geometry.dispose();
+                        child.material.dispose();
+                    });
+                    scene.remove(lines);
+                };
+            }, []);
+
+            return <canvas id="app-background-canvas" ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none"></canvas>;
+        };
+
+
+        const App = () => {
+            const { currentUser, userId, userProfile, isAuthReady, logout } = useAuth();
+            const theme = useTheme();
+            const [currentPage, setCurrentPage] = useState('browse');
+            const [headerSearchTerm, setHeaderSearchTerm] = useState(''); // New state for header search
+            const [showSwapRequestModal, setShowSwapRequestModal] = useState(false);
+            const [selectedRecipientId, setSelectedRecipientId] = useState(null);
+            const [selectedRecipientName, setSelectedRecipientName] = useState('');
+            const [platformWideMessage, setPlatformWideMessage] = useState('');
+            const [appMessage, setAppMessage] = useState('');
+            const [isAppMessageModalOpen, setIsAppMessageModalOpen] = useState(false);
+
+            useEffect(() => {
+                const fetchPlatformMessage = async () => {
+                    try {
+                        const response = await fetch(`${BASE_URL}/api/admin/platform_message`);
+                        const data = await response.json();
+                        if (response.ok) {
+                            setPlatformWideMessage(data.message || '');
+                        } else {
+                            console.error("Error fetching platform message:", data.error || response.statusText);
+                        }
+                    } catch (error) {
+                        console.error("Network error fetching platform message:", error.message);
+                    }
+                };
+                fetchPlatformMessage();
+                const interval = setInterval(fetchPlatformMessage, 15000); // Poll every 15 seconds
+                return () => clearInterval(interval);
+            }, []);
+
+            const handleSendSwapRequest = useCallback((recipientId, recipientName) => {
+                if (!userId) {
+                    setAppMessage('Please sign in to send swap requests.');
+                    setIsAppMessageModalOpen(true);
+                    return;
+                }
+                setSelectedRecipientId(recipientId);
+                setSelectedRecipientName(recipientName);
+                setShowSwapRequestModal(true);
+            }, [userId]);
+
+            const handleProfileUpdate = useCallback((updatedProfile) => {
+                console.log("Profile updated:", updatedProfile);
+                // In a real app, you might re-fetch the userProfile in AuthProvider
+                // or have AuthProvider provide a setter for userProfile.
+                // For this example, the AuthProvider's useEffect will re-fetch on userId change.
+            }, []);
+
+            if (!isAuthReady) {
+                return <LoadingSpinner />;
+            }
+
+            if (!currentUser) {
+                return <AuthPage onLoginSuccess={() => setCurrentPage('browse')} />;
+            }
+
+            return (
+                <div className={`min-h-screen relative bg-theme-bg text-theme-text`}>
+                    {currentPage !== 'auth' && <AppBackgroundAnimation />} {/* Render only if not on auth page */}
+                    <header className={`relative z-10 bg-gray-900 shadow-md py-4`}>
+                        <div className="container mx-auto px-4 flex justify-between items-center">
+                            <div className="flex items-center">
+                                <div className={`bg-primary-600 text-white w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold mr-3`}>
+                                    SS
+                                </div>
+                                <h1 className="text-xl font-bold text-gray-100">SkillSwap</h1>
+                            </div>
+                            <div className="flex-grow max-w-md mx-4 hidden md:block">
+                                {/* Search bar in header */}
+                                <input
+                                    type="text"
+                                    placeholder="Search skills, people, or trades..."
+                                    value={headerSearchTerm}
+                                    onChange={(e) => setHeaderSearchTerm(e.target.value)}
+                                    className="input-field py-2 px-4 text-sm bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                                />
+                            </div>
+                            <nav>
+                                <ul className="flex items-center space-x-4">
+                                    <li>
+                                        <button
+                                            onClick={() => setCurrentPage('browse')}
+                                            className={`nav-link ${currentPage === 'browse' ? 'active' : ''}`}
+                                        >
+                                            Discover
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            onClick={() => setCurrentPage('requests')}
+                                            className={`nav-link ${currentPage === 'requests' ? 'active' : ''}`}
+                                        >
+                                            My Requests
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            onClick={() => setCurrentPage('profile')}
+                                            className={`nav-link ${currentPage === 'profile' ? 'active' : ''}`}
+                                        >
+                                            Profile
+                                        </button>
+                                    </li>
+                                    {userProfile?.is_admin && (
+                                        <li>
+                                            <button
+                                                onClick={() => setCurrentPage('admin')}
+                                                className={`nav-link ${currentPage === 'admin' ? 'active' : ''}`}
+                                            >
+                                                Admin
+                                            </button>
+                                        </li>
+                                    )}
+                                    <li className="ml-4">
+                                        <button
+                                            onClick={logout}
+                                            className={`btn-secondary bg-gray-700 text-gray-200 hover:bg-gray-600 text-sm py-2 px-3`}
+                                        >
+                                            <i className="fas fa-sign-out-alt mr-1"></i> Sign Out
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </header>
+
+                    {platformWideMessage && (
+                        <div className={`platform-announcement`} role="alert">
+                            <p className="font-bold">Platform Announcement:</p>
+                            <p>{platformWideMessage}</p>
+                        </div>
+                    )}
+
+                    <main className="container mx-auto px-4 py-8 relative z-10">
+                        {/* User ID display - REMOVED for privacy */}
+                        {/* {userId && (
+                            <div className={`text-center mb-4 text-sm text-gray-400`}>
+                                Your User ID: <span className={`font-mono bg-gray-700 px-2 py-1 rounded-md text-gray-300`}>{userId}</span>
+                            </div>
+                        )} */}
+
+                        {currentPage === 'browse' && <BrowseUsers onSendSwapRequest={handleSendSwapRequest} searchTerm={headerSearchTerm} />}
+                        {currentPage === 'profile' && userId && userProfile && (
+                            <ProfilePage
+                                userProfile={userProfile}
+                                userId={userId}
+                                onProfileUpdate={handleProfileUpdate}
+                            />
+                        )}
+                        {currentPage === 'requests' && <SwapRequests />}
+                        {currentPage === 'admin' && <AdminPanel />}
+                    </main>
+
+                    <SwapRequestForm
+                        isOpen={showSwapRequestModal}
+                        onClose={() => setShowSwapRequestModal(false)}
+                        recipientId={selectedRecipientId}
+                        recipientName={selectedRecipientName}
+                    />
+                    <MessageModal isOpen={isAppMessageModalOpen} onClose={() => setIsAppMessageModalOpen(false)} message={appMessage} />
+                </div>
+            );
+        };
+
+        // Render the Root component
+        const Root = () => (
+            <AuthProvider>
+                <App />
+            </AuthProvider>
+        );
+
+        ReactDOM.render(<Root />, document.getElementById('root'));
+    </script>
+</body >
+</html >
