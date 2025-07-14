@@ -45,6 +45,14 @@ The Skill Swap Platform is designed to foster a community where individuals can 
 * **Dynamic Theming:** Users can select their preferred color theme.
 * **Animated Backgrounds:** Engaging visual elements using Three.js.
 
+## Website Look
+<img width="1599" height="918" alt="image" src="https://github.com/user-attachments/assets/0e0ab539-edbb-4dc5-85af-af8703d322fd" />
+<img width="1534" height="871" alt="image" src="https://github.com/user-attachments/assets/45de16c5-110d-4277-8cb6-263e758a7b8d" />
+<img width="1905" height="916" alt="image" src="https://github.com/user-attachments/assets/0eb7f09b-7d0f-47db-8b0d-be0d106610bf" />
+
+
+
+
 ## Technologies Used
 
 * **Backend:**
