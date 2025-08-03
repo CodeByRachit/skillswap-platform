@@ -82,6 +82,7 @@
         .my-12 { margin-top: 3rem; margin-bottom: 3rem; }
         .text-center { text-align: center; }
         .font-bold { font-weight: 700; }
+        
         .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
         .mb-6 { margin-bottom: 1.5rem; }
         .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem; }
@@ -347,6 +348,7 @@
             max-width: 300px; /* Limit width to make it visually centered */
             margin-left: auto; /* Center horizontally */
             margin-right: auto; /* Center horizontally */
+            text-align: center;
             /* New styles for animation and better look */
             @apply transition-all duration-200 ease-in-out;
             /* Focus state */
@@ -565,6 +567,14 @@
         }
         .modal-content-dark .input-field::placeholder {
             color: #a0aec0; /* Lighter placeholder text */
+        }
+        .newone{
+            display: grid;
+            place-items: center;
+            font-size: 1rem;
+            width: 500px;
+            height: 4rem;
+            border-radius: 99999px;
         }
 
     </style>
@@ -2144,7 +2154,7 @@
                                     value={bio}
                                     onChange={(e) => setBio(e.target.value)}
                                     rows="3"
-                                    className="input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+                                    className="newone input-field bg-gray-700 text-white border-gray-600 placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
                                     placeholder="Tell others about yourself and your expertise..."
                                 ></textarea>
                                 <button
